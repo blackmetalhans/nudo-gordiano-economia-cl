@@ -1,0 +1,80 @@
+name: Actualizar datos de simulación
+
+on:
+  # Ejecutar semanalmente todos los lunes a las 06:00 UTC
+  schedule:
+    - cron: "0 6 * * 1"
+  # Ejecutar también con cada push a la rama principal
+  push:
+    branches:
+      - main
+  # Permitir ejecución manual desde la pestaña Actions
+  workflow_dispatch:
+    inputs:
+      impuesto_especifico:
+        description: "Impuesto específico adicional (CLP/litro) – Pilar 2"
+        required: false
+        default: "0"
+      capas_burocraticas:
+        description: "Capas burocráticas – Pilar 3"
+        required: false
+        default: "5"
+      sobreprecio_construccion:
+        description: "Sobreprecio en obras municipales (%) – Pilar 1"
+        required: false
+        default: "0"
+      brent_base:
+        description: "Precio base del Brent (USD/barril) – Pilar 4"
+        required: false
+        default: "75"
+
+jobs:
+  simular-y-actualizar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar simulador (parámetros base)
+        if: github.event_name != 'workflow_dispatch'
+        run: |
+          python src/simulador.py \
+            --seed ${{ github.run_number }} \
+            --n 1000
+
+      - name: Ejecutar simulador (parámetros manuales)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          python src/simulador.py \
+            --seed ${{ github.run_number }} \
+            --n 1000 \
+            --impuesto-especifico ${{ github.event.inputs.impuesto_especifico }} \
+            --capas-burocraticas ${{ github.event.inputs.capas_burocraticas }} \
+            --sobreprecio-construccion ${{ github.event.inputs.sobreprecio_construccion }} \
+            --brent-base ${{ github.event.inputs.brent_base }}
+
+      - name: Auto-commit del CSV actualizado
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: |
+            data: actualizar simulacion_base.csv [run #${{ github.run_number }}]
+
+            Trigger  : ${{ github.event_name }}
+            Rama     : ${{ github.ref_name }}
+            Timestamp: ${{ github.event.repository.updated_at }}
+          file_pattern: data/simulacion_base.csv
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com
+          commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
