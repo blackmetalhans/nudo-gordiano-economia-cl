@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>El Nudo Gordiano | Derroche Fiscal en Chile</title>
+  <!-- MathJax: renderizado de ecuaciones LaTeX en el modal científico -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
   <style>
     :root {
       --bg: #0b1020;
@@ -41,6 +49,15 @@
       margin-bottom: 24px;
     }
 
+    .hero-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-text { flex: 1 1 300px; }
+
     h1 {
       margin: 0 0 8px;
       font-size: clamp(1.8rem, 3vw, 2.6rem);
@@ -53,6 +70,30 @@
       max-width: 72ch;
     }
 
+    /* ── Botón modal científico ── */
+    .btn-sci {
+      flex-shrink: 0;
+      align-self: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(94,234,212,0.18), rgba(96,165,250,0.18));
+      border: 1px solid rgba(94,234,212,0.45);
+      border-radius: 10px;
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 10px 18px;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+    .btn-sci:hover {
+      background: linear-gradient(135deg, rgba(94,234,212,0.28), rgba(96,165,250,0.28));
+      box-shadow: 0 0 16px rgba(94,234,212,0.25);
+    }
+    .btn-sci svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -60,12 +101,48 @@
       margin: 18px 0 24px;
     }
 
+    /* ── Cards con tooltip ── */
     .card {
       background: var(--card);
       border: 1px solid rgba(154, 164, 199, 0.2);
       border-radius: 14px;
       padding: 16px;
       box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .card[data-tip] { cursor: help; }
+
+    .card[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e2a4a;
+      border: 1px solid rgba(94,234,212,0.3);
+      border-radius: 8px;
+      padding: 9px 13px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+      width: max(200px, 60%);
+      max-width: 280px;
+      pointer-events: none;
+      z-index: 20;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      white-space: normal;
+    }
+    /* Arrow del tooltip */
+    .card[data-tip]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 2px);
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: rgba(94,234,212,0.3);
+      z-index: 21;
     }
 
     .kpi-label {
@@ -99,13 +176,18 @@
       background: var(--card);
       border: 1px solid rgba(154, 164, 199, 0.2);
       border-radius: 14px;
-      padding: 14px;
+      padding: 14px 14px 10px;
       box-shadow: var(--shadow);
+    }
+
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
     }
 
     canvas {
       width: 100%;
-      height: 220px;
+      height: auto;
       display: block;
       border-radius: 10px;
       background: linear-gradient(180deg, rgba(96, 165, 250, 0.06), rgba(96, 165, 250, 0.01));
@@ -127,32 +209,233 @@
 
     .loading { color: var(--accent2); }
     .warn { color: var(--danger); }
+
+    /* ══════════════════════════════════════════
+       MODAL CIENTÍFICO
+    ══════════════════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 11, 28, 0.82);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #111827;
+      border: 1px solid rgba(94,234,212,0.25);
+      border-radius: 18px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      width: min(780px, 100%);
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid rgba(154,164,199,0.15);
+      flex-shrink: 0;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.15rem;
+      color: var(--accent);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .modal-close:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+    .modal-body {
+      overflow-y: auto;
+      padding: 20px 24px 28px;
+      flex: 1;
+    }
+
+    .modal-body h3 {
+      margin: 20px 0 6px;
+      font-size: 0.95rem;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .modal-body h3:first-child { margin-top: 0; }
+
+    .modal-body p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .eq-block {
+      background: rgba(96,165,250,0.06);
+      border: 1px solid rgba(96,165,250,0.15);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 8px 0 14px;
+      font-size: 0.95rem;
+      overflow-x: auto;
+    }
+
+    .modal-body .tag {
+      display: inline-block;
+      background: rgba(94,234,212,0.12);
+      color: var(--accent);
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .hypothesis-list {
+      list-style: none;
+      padding: 0;
+      margin: 6px 0 14px;
+    }
+    .hypothesis-list li {
+      padding: 8px 12px;
+      border-left: 2px solid rgba(94,234,212,0.35);
+      margin-bottom: 8px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .hypothesis-list li strong { color: var(--text); }
   </style>
 </head>
 <body>
+
+  <!-- ══════════════════════════════════════════
+       MODAL: Formulación Científica
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="sciModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">⚗️ Formulación Científica del Modelo</h2>
+        <button class="modal-close" id="modalClose" aria-label="Cerrar modal">×</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+
+        <p>Ecuaciones analíticas calibradas sobre el simulador estocástico Monte Carlo. Cada pilar formaliza un mecanismo de fricción fiscal.</p>
+
+        <!-- Ecuación maestra -->
+        <h3>Ecuación maestra — Ingreso Neto Real</h3>
+        <span class="tag">Salida del modelo</span>
+        <div class="eq-block">
+          $$I_{neto,t} = Y_0 \cdot \mathcal{E}(k) \;-\; \delta_E \cdot P_{surtidor,t} \;-\; \delta_C \cdot C_{m^2,t}$$
+          <p style="margin:8px 0 0;font-size:0.82rem;">donde \(Y_0 = 1{,}182{,}000\) CLP, \(\delta_E = 0.12\), \(\delta_C = 0.01\)</p>
+        </div>
+
+        <!-- Pilar I -->
+        <h3>Pilar I — Fraude del Hormigón</h3>
+        <span class="tag">Costo de obra municipal</span>
+        <div class="eq-block">
+          $$\mu_{m^2}^{eff} = \mu_{m^2} \cdot \!\left(1 + \frac{s}{100}\right), \quad \mu_{m^2} = 30{,}000 \text{ CLP/m}^2$$
+          $$C_{m^2} \sim \mathcal{N}\!\left(\mu_{m^2}^{eff},\; \sigma_{m^2}^2\right), \quad \sigma_{m^2} = 3{,}000 \text{ CLP/m}^2$$
+          $$\Delta I_{fraude} = -\delta_C \cdot \mu_{m^2} \cdot \frac{s}{100}$$
+        </div>
+        <p>Con sobreprecio \(s = 20\%\), la pérdida directa es \(-60\) CLP/mes por ciudadano, con varianza inducida \(\delta_C^2\sigma_{m^2}^2 = 900\) CLP².</p>
+
+        <!-- Pilar II -->
+        <h3>Pilar II — Exacción Energética</h3>
+        <span class="tag">Regresión calibrada Brent → Surtidor</span>
+        <div class="eq-block">
+          $$P_{surtidor,t} = \underbrace{8.4486}_{\alpha} \cdot B_t \;+\; \underbrace{550.93}_{\beta} \;+\; \tau \;+\; \varepsilon_t$$
+          $$\varepsilon_t \sim \mathcal{N}(0,\; 15^2) \quad\text{(ruido de mercado, CLP/litro)}$$
+          $$\frac{\partial I_{neto}}{\partial B_t} = -\delta_E \cdot \alpha = -0.12 \times 8.4486 \approx -1.014 \text{ CLP/mes · barril/USD}$$
+        </div>
+        <p>El impuesto específico base chileno equivale a \(\tau_0 \approx 222\) CLP/litro (≈6 UTM/m³ al valor UTM vigente). Cada +10 USD/barril en Brent erosiona ≈10.14 CLP/mes de ingreso neto.</p>
+
+        <!-- Pilar III -->
+        <h3>Pilar III — Hipertrofia Burocrática</h3>
+        <span class="tag">Función de eficiencia por capas de gobernanza</span>
+        <div class="eq-block">
+          $$\mathcal{E}(k) = \max\!\left(0.05,\; 1 - 0.09 \cdot k\right)$$
+          $$Y_{bruto}(k) = Y_0 \cdot \mathcal{E}(k) = 1{,}182{,}000 \cdot \mathcal{E}(k)$$
+          $$\frac{\partial Y_{bruto}}{\partial k} = -106{,}380 \text{ CLP/mes por capa adicional}$$
+        </div>
+        <p>Estructura base chilena: GORE + Delegados Presidenciales + SEREMI + Municipio + coordinación central (\(k=5\)) → \(\mathcal{E}(5) = 0.55\). Pérdida vs óptimo: 531,900 CLP/mes.</p>
+
+        <!-- Pilar IV -->
+        <h3>Pilar IV — Commoditización (función de transferencia)</h3>
+        <span class="tag">Acoplamiento Brent → Ingreso Neto</span>
+        <div class="eq-block">
+          $$B_t \sim \mathcal{N}(\mu_B,\; \sigma_B^2), \quad B_t \geq 20, \quad \mu_B=75\text{ USD}, \;\sigma_B=12\text{ USD}$$
+          $$I_{neto,t} = \underbrace{\!\left[Y_0 \cdot \mathcal{E}(k) - \delta_E(\beta+\tau) - \delta_C\mu_{m^2}^{eff}\right]\!}_{\mu_I} - \underbrace{\delta_E\alpha}_{\phi=1.014} \cdot B_t \;+\; \eta_t$$
+          $$\text{Var}[\eta_t] = \delta_E^2\sigma_\varepsilon^2 + \delta_C^2\sigma_{m^2}^2 = 3.24 + 9 = 12.24 \text{ CLP}^2$$
+        </div>
+        <p>Las bandas de control estadístico \(\mu_I \pm 3\sigma_I\) delimitan el rango esperado del ingreso neto en el gráfico de la interfaz.</p>
+
+        <!-- Hipótesis analíticas -->
+        <h3>Hipótesis analíticas del modelo</h3>
+        <ul class="hypothesis-list">
+          <li><strong>H1 (linealidad energética):</strong> el traspaso del Brent al surtidor es lineal con coeficiente constante \(\alpha\) en el rango de simulación.</li>
+          <li><strong>H2 (independencia de pilares):</strong> los pilares actúan aditivamente sobre el ingreso neto, sin interacciones cruzadas de segundo orden.</li>
+          <li><strong>H3 (normalidad del ruido):</strong> los residuos del precio surtidor y costo de obra se distribuyen normalmente (verificable con KS-test sobre el CSV).</li>
+          <li><strong>H4 (eficiencia lineal-cóncava):</strong> la función \(\mathcal{E}(k)\) es convexa en \(k\) con piso en 0.05, modelando rendimientos decrecientes de la burocracia.</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
   <main class="wrap">
     <section class="hero">
-      <h1>El Nudo Gordiano: Derroche Fiscal en Chile</h1>
-      <p class="sub">
-        Visualización ejecutiva del paper: simulación sobre cómo sobrecostos públicos, presión energética e
-        ineficiencia estatal impactan el ingreso neto real del ciudadano.
-      </p>
+      <div class="hero-row">
+        <div class="hero-text">
+          <h1>El Nudo Gordiano: Derroche Fiscal en Chile</h1>
+          <p class="sub">
+            Visualización ejecutiva del paper: simulación sobre cómo sobrecostos públicos, presión energética e
+            ineficiencia estatal impactan el ingreso neto real del ciudadano.
+          </p>
+        </div>
+        <button class="btn-sci" id="openSciModal">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M9 2a7 7 0 100 14A7 7 0 009 2zm0 1.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zm.75 2.25h-1.5v4.5l3.75 2.25.75-1.25-3-1.8V5.75z"/></svg>
+          Ver Formulación Científica
+        </button>
+      </div>
     </section>
 
     <section class="grid">
-      <article class="card">
+      <article class="card"
+        data-tip="Total de trayectorias Monte Carlo generadas por el simulador. Cada fila del CSV es un escenario independiente con semilla controlada para reproducibilidad.">
         <p class="kpi-label">Escenarios simulados</p>
         <p class="kpi-value" id="kpi-count">—</p>
       </article>
-      <article class="card">
+      <article class="card"
+        data-tip="Media de Ingreso_Neto_Real_Ciudadano (CLP/mes). Se calcula como Y₀·E(k) − δE·P_surtidor − δC·Costo_m². Refleja el bienestar neto tras las 4 fricciones fiscales.">
         <p class="kpi-label">Ingreso neto real promedio</p>
         <p class="kpi-value" id="kpi-income">—</p>
       </article>
-      <article class="card">
+      <article class="card"
+        data-tip="Media de Costo_M2_Obra_Muni (CLP/m²). Incluye sobreprecio fraudulento sobre el costo base de $30,000 CLP/m², modelado como proceso Normal con σ = $3,000 CLP/m².">
         <p class="kpi-label">Costo obra municipal promedio ($ por m² de obra)</p>
         <p class="kpi-value" id="kpi-cost">—</p>
       </article>
-      <article class="card">
+      <article class="card"
+        data-tip="Media de Precio_Surtidor_Litro (CLP/litro). Ecuación calibrada: 8.4486 × Brent + 550.93 + τ + ε. El impuesto específico base chileno es ≈6 UTM/m³ (≈222 CLP/litro).">
         <p class="kpi-label">Precio surtidor promedio (litro)</p>
         <p class="kpi-value" id="kpi-fuel">—</p>
       </article>
@@ -161,16 +444,30 @@
     <section>
       <h2 class="section-title">4 pilares del modelo</h2>
       <div class="pillars">
-        <article class="card pillar"><strong>Fraude del Hormigón</strong><br/>Sobrecostos en licitaciones y su efecto regresivo.</article>
-        <article class="card pillar"><strong>Exacción Energética</strong><br/>Impuesto específico + Brent como presión al consumo.</article>
-        <article class="card pillar"><strong>Hipertrofia Burocrática</strong><br/>Capas administrativas que reducen eficiencia fiscal.</article>
-        <article class="card pillar"><strong>Commoditización</strong><br/>Dependencia externa y vulnerabilidad a shocks.</article>
+        <article class="card pillar"
+          data-tip="Modela sobreprecio s% sobre costo base de obra municipal ($30,000 CLP/m²). Cada 10% de sobreprecio reduce el ingreso neto en $30 CLP/mes. Varianza inducida: σ²= 900 CLP².">
+          <strong>Fraude del Hormigón</strong><br/>Sobrecostos en licitaciones y su efecto regresivo.
+        </article>
+        <article class="card pillar"
+          data-tip="Traspaso del Brent al surtidor vía regresión lineal calibrada (α=8.4486 CLP/litro·barril/USD). El impuesto específico chileno base equivale a ≈6 UTM/m³ (≈222 CLP/litro). Canal energético = 12% del ingreso bruto.">
+          <strong>Exacción Energética</strong><br/>Impuesto específico + Brent como presión al consumo.
+        </article>
+        <article class="card pillar"
+          data-tip="E(k) = max(0.05, 1 − 0.09k). Con k=5 capas (GORE, Delegados, SEREMI, Municipio, central), E(5)=0.55. Pérdida vs óptimo: 531,900 CLP/mes (45% del potencial). Costo marginal: −106,380 CLP/mes por capa.">
+          <strong>Hipertrofia Burocrática</strong><br/>Capas administrativas que reducen eficiencia fiscal.
+        </article>
+        <article class="card pillar"
+          data-tip="Brent ~ N(μ=75, σ=12) USD/barril. Coeficiente de transmisión al ingreso: φ = δE·α ≈ 1.014 CLP/mes por USD/barril. Un shock de +10 USD/barril erosiona ≈10.14 CLP/mes de ingreso neto.">
+          <strong>Commoditización</strong><br/>Dependencia externa y vulnerabilidad a shocks.
+        </article>
       </div>
     </section>
 
     <section class="chart-box">
-      <h2 class="section-title">Tendencia del ingreso neto real (muestra)</h2>
-      <canvas id="incomeChart" width="1000" height="260" aria-label="Gráfico del ingreso neto real"></canvas>
+      <h2 class="section-title">Tendencia del ingreso neto real (muestra) — bandas μ ± 3σ</h2>
+      <div class="canvas-wrap">
+        <canvas id="incomeChart" aria-label="Gráfico del ingreso neto real con bandas de control estadístico"></canvas>
+      </div>
       <p id="status" class="note loading">Cargando datos desde <code>data/simulacion_base.csv</code>…</p>
       <p class="note">Tip: abre este archivo vía servidor local para habilitar la carga de CSV en navegadores con políticas estrictas.</p>
     </section>
@@ -181,192 +478,303 @@
   </main>
 
   <script>
-    const fmtInt = new Intl.NumberFormat('es-CL');
+    /* ──────────────────────────────
+       Modal: abrir / cerrar
+    ────────────────────────────── */
+    const overlay = document.getElementById('sciModal');
+    document.getElementById('openSciModal').addEventListener('click', () => {
+      overlay.classList.add('open');
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([document.getElementById('modalBody')]);
+      }
+    });
+    document.getElementById('modalClose').addEventListener('click', () => overlay.classList.remove('open'));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') overlay.classList.remove('open'); });
+
+    /* ──────────────────────────────
+       Helpers
+    ────────────────────────────── */
+    const fmtInt   = new Intl.NumberFormat('es-CL');
     const fmtMoney = new Intl.NumberFormat('es-CL', { maximumFractionDigits: 0 });
 
     const el = {
-      count: document.getElementById('kpi-count'),
+      count:  document.getElementById('kpi-count'),
       income: document.getElementById('kpi-income'),
-      cost: document.getElementById('kpi-cost'),
-      fuel: document.getElementById('kpi-fuel'),
+      cost:   document.getElementById('kpi-cost'),
+      fuel:   document.getElementById('kpi-fuel'),
       status: document.getElementById('status'),
       canvas: document.getElementById('incomeChart')
     };
 
-    // Límite para mantener una visualización fluida y legible en canvas.
     const MAX_CHART_POINTS = 140;
-    const mean = (arr) => {
-      if (!arr.length) return 0;
-      return arr.reduce((a, b) => a + b, 0) / arr.length;
+
+    const mean = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+    const stdDev = (arr, mu) => {
+      if (arr.length < 2) return 0;
+      const variance = arr.reduce((s, v) => s + (v - mu) ** 2, 0) / arr.length;
+      return Math.sqrt(variance);
     };
 
+    /* ──────────────────────────────
+       Canvas: DPR-aware sizing
+    ────────────────────────────── */
+    function resizeCanvas(canvas) {
+      const dpr  = window.devicePixelRatio || 1;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const w    = Math.floor(rect.width);
+      const h    = Math.max(180, Math.floor(w * 0.28));   // ≈28% aspect, min 180px
+      canvas.width  = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width  = w + 'px';
+      canvas.style.height = h + 'px';
+      return { w: w * dpr, h: h * dpr, dpr };
+    }
+
+    /* ──────────────────────────────
+       Canvas: dibujar gráfico
+    ────────────────────────────── */
+    let lastValues = null;
+
     function drawLineChart(values) {
+      if (!values || !values.length) return;
+      lastValues = values;
+
       const canvas = el.canvas;
       const ctx = canvas.getContext('2d');
-      if (!ctx || !values.length) return;
+      if (!ctx) return;
 
-      const w = canvas.width;
-      const h = canvas.height;
-      const pad = 34;
+      const { w, h, dpr } = resizeCanvas(canvas);
+      ctx.scale(dpr, dpr);
+      const rw = w / dpr;
+      const rh = h / dpr;
 
-      ctx.clearRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(154, 164, 199, 0.35)';
-      ctx.lineWidth = 1;
+      // Márgenes adaptados a tamaño de pantalla
+      const padL = rw < 400 ? 54 : 70;   // espacio eje Y con etiquetas
+      const padR = 16;
+      const padT = 22;
+      const padB = rw < 400 ? 36 : 42;   // espacio eje X
 
-      for (let i = 0; i <= 4; i += 1) {
-        const y = pad + ((h - pad * 2) * i) / 4;
+      ctx.clearRect(0, 0, rw, rh);
+
+      // Estadísticas para bandas de control
+      const mu  = mean(values);
+      const sig = stdDev(values, mu);
+      const mu3sigHigh = mu + 3 * sig;
+      const mu3sigLow  = mu - 3 * sig;
+
+      const dataMin = Math.min(...values, mu3sigLow)  * 0.999;
+      const dataMax = Math.max(...values, mu3sigHigh) * 1.001;
+      const range   = Math.max(dataMax - dataMin, 1);
+
+      const xAt = (i) => padL + ((rw - padL - padR) * i) / Math.max(values.length - 1, 1);
+      const yAt = (v)  => rh - padB - ((v - dataMin) / range) * (rh - padT - padB);
+
+      /* ── Cuadrícula horizontal ── */
+      const gridCount = rw < 400 ? 3 : 5;
+      ctx.strokeStyle = 'rgba(154,164,199,0.18)';
+      ctx.lineWidth   = 1;
+      ctx.font        = `${rw < 400 ? 9 : 11}px Inter,sans-serif`;
+      ctx.fillStyle   = '#6b7594';
+      ctx.textAlign   = 'right';
+      ctx.textBaseline = 'middle';
+
+      for (let i = 0; i <= gridCount; i++) {
+        const v = dataMin + (range * i) / gridCount;
+        const y = yAt(v);
         ctx.beginPath();
-        ctx.moveTo(pad, y);
-        ctx.lineTo(w - pad, y);
+        ctx.moveTo(padL, y);
+        ctx.lineTo(rw - padR, y);
         ctx.stroke();
+        ctx.fillText('$' + fmtMoney.format(Math.round(v)), padL - 5, y);
       }
 
-      const min = Math.min(...values);
-      const max = Math.max(...values);
-      const range = Math.max(max - min, 1);
+      /* ── Etiqueta eje Y ── */
+      ctx.save();
+      ctx.translate(11, rh / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle    = '#6b7594';
+      ctx.font         = `${rw < 400 ? 8 : 10}px Inter,sans-serif`;
+      ctx.fillText('CLP / mes', 0, 0);
+      ctx.restore();
 
-      const xAt = (i) => {
-        if (values.length <= 1) return w / 2;
-        return pad + ((w - pad * 2) * i) / (values.length - 1);
+      /* ── Etiquetas eje X ── */
+      const xLabelCount = rw < 400 ? 3 : 5;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle    = '#6b7594';
+      ctx.font         = `${rw < 400 ? 9 : 11}px Inter,sans-serif`;
+      for (let i = 0; i <= xLabelCount; i++) {
+        const idx = Math.round((i / xLabelCount) * (values.length - 1));
+        const x   = xAt(idx);
+        ctx.fillText('E' + (idx + 1), x, rh - padB + 5);
+      }
+      // Título eje X
+      ctx.fillStyle = '#6b7594';
+      ctx.font      = `${rw < 400 ? 8 : 10}px Inter,sans-serif`;
+      ctx.fillText('Escenarios', padL + (rw - padL - padR) / 2, rh - (rw < 400 ? 14 : 16));
+
+      /* ── Banda 3σ rellena ── */
+      const band3H = yAt(mu3sigHigh);
+      const band3L = yAt(mu3sigLow);
+      ctx.fillStyle = 'rgba(96,165,250,0.07)';
+      ctx.fillRect(padL, band3H, rw - padL - padR, band3L - band3H);
+
+      /* ── Líneas μ ± 3σ ── */
+      const drawDashed = (y, color, label) => {
+        ctx.save();
+        ctx.setLineDash([5, 4]);
+        ctx.strokeStyle = color;
+        ctx.lineWidth   = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(rw - padR, y);
+        ctx.stroke();
+        ctx.restore();
+        ctx.fillStyle    = color;
+        ctx.textAlign    = 'left';
+        ctx.textBaseline = 'bottom';
+        ctx.font         = `${rw < 400 ? 8 : 10}px Inter,sans-serif`;
+        ctx.fillText(label, padL + 4, y - 2);
       };
-      const yAt = v => h - pad - ((v - min) / range) * (h - pad * 2);
+      drawDashed(yAt(mu3sigHigh), 'rgba(251,113,133,0.7)', 'μ+3σ');
+      drawDashed(yAt(mu3sigLow),  'rgba(251,113,133,0.7)', 'μ−3σ');
 
-      const gradient = ctx.createLinearGradient(0, pad, 0, h - pad);
-      gradient.addColorStop(0, 'rgba(94, 234, 212, 0.35)');
-      gradient.addColorStop(1, 'rgba(94, 234, 212, 0.02)');
+      /* ── Línea μ ── */
+      ctx.save();
+      ctx.setLineDash([6, 3]);
+      ctx.strokeStyle = 'rgba(96,165,250,0.55)';
+      ctx.lineWidth   = 1.2;
+      const muY = yAt(mu);
+      ctx.beginPath();
+      ctx.moveTo(padL, muY);
+      ctx.lineTo(rw - padR, muY);
+      ctx.stroke();
+      ctx.restore();
+      ctx.fillStyle    = 'rgba(96,165,250,0.7)';
+      ctx.textAlign    = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.font         = `${rw < 400 ? 8 : 10}px Inter,sans-serif`;
+      ctx.fillText('μ', padL + 4, muY - 2);
+
+      /* ── Área rellena de la serie ── */
+      const gradient = ctx.createLinearGradient(0, padT, 0, rh - padB);
+      gradient.addColorStop(0, 'rgba(94,234,212,0.32)');
+      gradient.addColorStop(1, 'rgba(94,234,212,0.02)');
 
       ctx.beginPath();
       values.forEach((v, i) => {
-        const x = xAt(i);
-        const y = yAt(v);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        const x = xAt(i), y = yAt(v);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       });
-      ctx.lineTo(xAt(values.length - 1), h - pad);
-      ctx.lineTo(xAt(0), h - pad);
+      ctx.lineTo(xAt(values.length - 1), rh - padB);
+      ctx.lineTo(xAt(0), rh - padB);
       ctx.closePath();
       ctx.fillStyle = gradient;
       ctx.fill();
 
+      /* ── Línea de la serie ── */
       ctx.beginPath();
       values.forEach((v, i) => {
-        const x = xAt(i);
-        const y = yAt(v);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        const x = xAt(i), y = yAt(v);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       });
       ctx.strokeStyle = '#5eead4';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth   = 2;
+      ctx.setLineDash([]);
       ctx.stroke();
-
-      ctx.fillStyle = '#9aa4c7';
-      ctx.font = '12px Inter, sans-serif';
-      ctx.fillText(`Min: ${fmtMoney.format(min)}`, pad, h - 10);
-      ctx.fillText(`Max: ${fmtMoney.format(max)}`, w - pad - 140, h - 10);
     }
 
+    /* ──────────────────────────────
+       Responsive: redibujar en resize
+    ────────────────────────────── */
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { if (lastValues) drawLineChart(lastValues); }, 150);
+    });
+
+    /* ──────────────────────────────
+       CSV parser
+    ────────────────────────────── */
     function splitCsvLine(line) {
       const out = [];
       let current = '';
       let inQuotes = false;
-
-      for (let i = 0; i < line.length; i += 1) {
+      for (let i = 0; i < line.length; i++) {
         const char = line[i];
         const next = line[i + 1];
-
-        if (char === '"' && inQuotes && next === '"') {
-          current += '"';
-          i += 1;
-          continue;
-        }
-
-        if (char === '"') {
-          inQuotes = !inQuotes;
-          continue;
-        }
-
-        if (char === ',' && !inQuotes) {
-          out.push(current);
-          current = '';
-          continue;
-        }
-
+        if (char === '"' && inQuotes && next === '"') { current += '"'; i++; continue; }
+        if (char === '"') { inQuotes = !inQuotes; continue; }
+        if (char === ',' && !inQuotes) { out.push(current); current = ''; continue; }
         current += char;
       }
-
       out.push(current);
       return out;
     }
 
+    /* ──────────────────────────────
+       Carga de datos
+    ────────────────────────────── */
     async function loadData() {
       try {
         const res = await fetch('data/simulacion_base.csv', { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        const raw = await res.text();
-        const rows = raw.trim().split(/\r?\n/);
+        const raw     = await res.text();
+        const rows    = raw.trim().split(/\r?\n/);
         const headers = splitCsvLine(rows[0]);
 
         const idx = {
-          fuel: headers.indexOf('Precio_Surtidor_Litro'),
-          cost: headers.indexOf('Costo_M2_Obra_Muni'),
+          fuel:   headers.indexOf('Precio_Surtidor_Litro'),
+          cost:   headers.indexOf('Costo_M2_Obra_Muni'),
           income: headers.indexOf('Ingreso_Neto_Real_Ciudadano')
         };
 
-        if (Object.values(idx).some(v => v < 0)) {
-          throw new Error('Columnas esperadas no encontradas en CSV.');
-        }
+        if (Object.values(idx).some(v => v < 0)) throw new Error('Columnas esperadas no encontradas en CSV.');
 
         let skippedRows = 0;
         const data = rows.slice(1).map((line) => {
           const cells = splitCsvLine(line);
-          let invalidRow = cells.length !== headers.length;
-          const numericValues = [];
-          for (let i = 0; i < cells.length && !invalidRow; i += 1) {
-            const parsedValue = Number(cells[i]);
-            if (!Number.isFinite(parsedValue)) {
-              invalidRow = true;
-              break;
-            }
-            numericValues.push(parsedValue);
+          if (cells.length !== headers.length) { skippedRows++; return null; }
+          const nums = [];
+          for (const cell of cells) {
+            const n = Number(cell);
+            if (!Number.isFinite(n)) { skippedRows++; return null; }
+            nums.push(n);
           }
-          if (invalidRow) {
-            skippedRows += 1;
-            return null;
-          }
-          return numericValues;
+          return nums;
         }).filter(Boolean);
 
         if (!data.length) throw new Error('CSV sin datos válidos.');
 
         const incomes = data.map(r => r[idx.income]);
-        const costs = data.map(r => r[idx.cost]);
-        const fuels = data.map(r => r[idx.fuel]);
+        const costs   = data.map(r => r[idx.cost]);
+        const fuels   = data.map(r => r[idx.fuel]);
 
-        el.count.textContent = fmtInt.format(data.length);
-        el.income.textContent = `$${fmtMoney.format(mean(incomes))}`;
-        el.cost.textContent = `$${fmtMoney.format(mean(costs))}`;
-        el.fuel.textContent = `$${fmtMoney.format(mean(fuels))}`;
+        el.count.textContent  = fmtInt.format(data.length);
+        el.income.textContent = '$' + fmtMoney.format(mean(incomes));
+        el.cost.textContent   = '$' + fmtMoney.format(mean(costs));
+        el.fuel.textContent   = '$' + fmtMoney.format(mean(fuels));
 
+        // Muestreo uniforme para el gráfico
         const sampledIncomes = (() => {
           if (incomes.length <= MAX_CHART_POINTS) return incomes;
           const stride = (incomes.length - 1) / (MAX_CHART_POINTS - 1);
-          const points = [];
-          for (let i = 0; i < MAX_CHART_POINTS; i += 1) {
-            const sampleIndex = Math.round(i * stride);
-            points.push(incomes[sampleIndex]);
-          }
-          return points;
+          return Array.from({ length: MAX_CHART_POINTS }, (_, i) => incomes[Math.round(i * stride)]);
         })();
+
         drawLineChart(sampledIncomes);
 
-        el.status.className = 'note';
+        el.status.className   = 'note';
         el.status.textContent = skippedRows
           ? `Datos cargados con ${fmtInt.format(skippedRows)} fila(s) omitidas por formato inválido.`
           : 'Datos cargados correctamente. Visualización activa.';
-      } catch (error) {
-        el.status.className = 'note warn';
-        el.status.textContent = `No fue posible cargar datos automáticamente (${error.message}). Abre con servidor local.`;
+      } catch (err) {
+        el.status.className   = 'note warn';
+        el.status.textContent = `No fue posible cargar datos automáticamente (${err.message}). Abre con servidor local.`;
       }
     }
 
