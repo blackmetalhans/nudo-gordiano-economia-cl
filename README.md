@@ -1,5 +1,12 @@
 # El Nudo Gordiano: Anatomía del Derroche Fiscal en Chile
 
+[![Reproducibility: Executable Paper](https://img.shields.io/badge/Reproducibility-Executable_Paper-0052cc)](#-reproducibilidad-computacional)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## 📄 Abstract
+Este repositorio formaliza un modelo estocástico de fricción fiscal aplicado a la economía chilena, estructurado como un *Executable Paper*. Mediante simulaciones de Monte Carlo, cuantifica la erosión del ingreso neto real a través de cuatro vectores ortogonales: hipertrofia de gobernanza ($k$-capas), varianza en costos de infraestructura pública, exacción tributaria energética y shocks exógenos de *commodities* (Brent). La arquitectura permite auditoría matemática directa y reproducibilidad determinista de la inferencia.
+
+
 **Tipo:** Paper Aplicado · Simulación Estocástica · Economía Pública  
 **Formato:** Executable Paper (código + datos + visualización reproducible)  
 **Repositorio:** `blackmetalhans/nudo-gordiano-economia-cl`
@@ -380,3 +387,22 @@ python3 -m http.server 8000
 - Incorporar tests de consistencia estadística (Kolmogorov-Smirnov, test de normalidad) del motor de simulación.
 - Publicar series comparativas con datos reales del INE/CNE para validación empírica del modelo.
 - Estimar intervalos de confianza bootstrap para los coeficientes calibrados ($\alpha$, $\delta_E$, $\delta_C$).
+
+---
+## ⚙️ Reproducibilidad Computacional
+
+Para auditar o recalibrar la inferencia estocástica localmente, el modelo requiere Python 3.10+ y la regeneración de la semilla de Monte Carlo.
+
+```bash
+# 1. Clonar repositorio y levantar entorno aisaldo
+git clone https://github.com/blackmetalhans/nudo-gordiano-economia-cl.git
+cd nudo-gordiano-economia-cl
+python -m venv venv
+source venv/bin/activate  # o venv\Scripts\activate en Windows
+
+# 2. Instalar dependencias del motor matemático
+pip install numpy pandas scipy
+
+# 3. Ejecutar simulación base (sobrescribe data/simulacion_base.csv)
+python src/simulador.py --iterations 10000 --seed 42
+```
