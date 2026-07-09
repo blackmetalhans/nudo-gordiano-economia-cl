@@ -149,7 +149,7 @@
         <p class="kpi-value" id="kpi-income">—</p>
       </article>
       <article class="card">
-        <p class="kpi-label">Costo obra municipal promedio ($ por m2 de obra)</p>
+        <p class="kpi-label">Costo obra municipal promedio ($ por m² de obra)</p>
         <p class="kpi-value" id="kpi-cost">—</p>
       </article>
       <article class="card">
@@ -320,18 +320,19 @@
         let skippedRows = 0;
         const data = rows.slice(1).map((line) => {
           const cells = splitCsvLine(line);
-          if (cells.length !== headers.length) {
-            skippedRows += 1;
-            return null;
-          }
+          let invalidRow = cells.length !== headers.length;
           const numericValues = [];
-          for (let i = 0; i < cells.length; i += 1) {
+          for (let i = 0; i < cells.length && !invalidRow; i += 1) {
             const parsedValue = Number(cells[i]);
             if (!Number.isFinite(parsedValue)) {
-              skippedRows += 1;
-              return null;
+              invalidRow = true;
+              break;
             }
             numericValues.push(parsedValue);
+          }
+          if (invalidRow) {
+            skippedRows += 1;
+            return null;
           }
           return numericValues;
         }).filter(Boolean);
@@ -347,17 +348,17 @@
         el.cost.textContent = `$${fmtMoney.format(mean(costs))}`;
         el.fuel.textContent = `$${fmtMoney.format(mean(fuels))}`;
 
-        const sampled = (() => {
+        const sampledIncomes = (() => {
           if (incomes.length <= MAX_CHART_POINTS) return incomes;
           const stride = (incomes.length - 1) / (MAX_CHART_POINTS - 1);
           const points = [];
           for (let i = 0; i < MAX_CHART_POINTS; i += 1) {
-            const idx = Math.round(i * stride);
-            points.push(incomes[idx]);
+            const sampleIndex = Math.round(i * stride);
+            points.push(incomes[sampleIndex]);
           }
           return points;
         })();
-        drawLineChart(sampled);
+        drawLineChart(sampledIncomes);
 
         el.status.className = 'note';
         el.status.textContent = skippedRows
