@@ -158,6 +158,53 @@
       letter-spacing: 0.2px;
     }
 
+    .visceral {
+      margin: 0 0 24px;
+    }
+
+    .visceral-title {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+      color: #f8fafc;
+    }
+
+    .visceral-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .visceral-card {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .visceral-card h3 {
+      margin: 0 0 8px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #cbd5e1;
+    }
+
+    .visceral-number {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #f8fafc;
+      line-height: 1.25;
+    }
+
+    .visceral-copy {
+      margin: 0;
+      font-size: 0.86rem;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
     .section-title {
       margin: 0 0 10px;
       font-size: 1.1rem;
@@ -441,6 +488,26 @@
       </article>
     </section>
 
+    <section class="visceral" aria-labelledby="visceral-title">
+      <h2 class="visceral-title" id="visceral-title">Impacto Visceral / Traducción Real</h2>
+      <div class="visceral-grid">
+        <article class="visceral-card">
+          <h3>Burocracia superpuesta</h3>
+          <p class="visceral-number" id="visceral-bureaucracy">—</p>
+          <p class="visceral-copy" id="visceral-bureaucracy-copy">—</p>
+        </article>
+        <article class="visceral-card">
+          <h3>Copec / Shell</h3>
+          <p class="visceral-number" id="visceral-fuel-tax">—</p>
+          <p class="visceral-copy">Del costo de un estanque de 45 litros, este porcentaje es impuesto específico puro para el Estado.</p>
+        </article>
+        <article class="visceral-card">
+          <h3>Alerta comunal</h3>
+          <p class="visceral-copy" id="visceral-alert">—</p>
+        </article>
+      </div>
+    </section>
+
     <section>
       <h2 class="section-title">4 pilares del modelo</h2>
       <div class="pillars">
@@ -497,12 +564,23 @@
     ────────────────────────────── */
     const fmtInt   = new Intl.NumberFormat('es-CL');
     const fmtMoney = new Intl.NumberFormat('es-CL', { maximumFractionDigits: 0 });
+    const INGRESO_POTENCIAL_BASE = 1_182_000; // Y0 del README.md, sección "Metodología y Formalización Matemática".
+    const CAPAS_SUPERPUESTAS = 5; // Estructura base documentada en README.md, actualización 2026-07.
+    const EFICIENCIA_DEFAULT = 0.55;
+    const IMPUESTO_UTM_M3 = 6; // Parámetro legal del enunciado: 6 UTM por m³.
+    const UTM_REFERENCIA_CLP = 65_927; // Referencia UTM agosto 2024 usada en README.md.
+    const LITROS_ESTANQUE = 45;
+    const COSTO_BASE_OBRA_CIVIL_M2 = 15_000; // Piso base del modelo para costo de obra civil municipal (CLP/m²).
 
     const el = {
       count:  document.getElementById('kpi-count'),
       income: document.getElementById('kpi-income'),
       cost:   document.getElementById('kpi-cost'),
       fuel:   document.getElementById('kpi-fuel'),
+      visceralBureaucracy: document.getElementById('visceral-bureaucracy'),
+      visceralBureaucracyCopy: document.getElementById('visceral-bureaucracy-copy'),
+      visceralFuelTax: document.getElementById('visceral-fuel-tax'),
+      visceralAlert: document.getElementById('visceral-alert'),
       status: document.getElementById('status'),
       canvas: document.getElementById('incomeChart')
     };
@@ -730,10 +808,12 @@
         const idx = {
           fuel:   headers.indexOf('Precio_Surtidor_Litro'),
           cost:   headers.indexOf('Costo_M2_Obra_Muni'),
-          income: headers.indexOf('Ingreso_Neto_Real_Ciudadano')
+          income: headers.indexOf('Ingreso_Neto_Real_Ciudadano'),
+          efficiency: headers.indexOf('Eficiencia_Aparato_Estatal')
         };
 
-        if (Object.values(idx).some(v => v < 0)) throw new Error('Columnas esperadas no encontradas en CSV.');
+        const missingColumns = Object.entries(idx).filter(([, columnIdx]) => columnIdx < 0).map(([name]) => name);
+        if (missingColumns.length) throw new Error(`Columnas esperadas no encontradas en CSV: ${missingColumns.join(', ')}`);
 
         let skippedRows = 0;
         const data = rows.slice(1).map((line) => {
@@ -753,11 +833,32 @@
         const incomes = data.map(r => r[idx.income]);
         const costs   = data.map(r => r[idx.cost]);
         const fuels   = data.map(r => r[idx.fuel]);
+        const efficiencies = data.map(r => r[idx.efficiency]);
+
+        const meanIncome = mean(incomes);
+        const meanCost = mean(costs);
+        const meanFuel = mean(fuels);
+        const meanEfficiencyRaw = efficiencies.length ? mean(efficiencies) : EFICIENCIA_DEFAULT;
+        const meanEfficiency = Math.min(1, Math.max(0, meanEfficiencyRaw));
+
+        // Eficiencia en [0,1]: (1 - eficiencia) representa la fracción del ingreso potencial que se pierde.
+        const perdidaMensualFamilia = INGRESO_POTENCIAL_BASE * (1 - meanEfficiency);
+        const impuestoPorLitro = (IMPUESTO_UTM_M3 * UTM_REFERENCIA_CLP) / 1000;
+        const impuestoPorEstanque = impuestoPorLitro * LITROS_ESTANQUE;
+        const costoEstanque = meanFuel * LITROS_ESTANQUE;
+        const porcentajeImpuestoEstanque = meanFuel > 0
+          ? (impuestoPorEstanque / costoEstanque) * 100
+          : 0;
+        const sobrecostoComunalM2 = Math.max(0, meanCost - COSTO_BASE_OBRA_CIVIL_M2);
 
         el.count.textContent  = fmtInt.format(data.length);
-        el.income.textContent = '$' + fmtMoney.format(mean(incomes));
-        el.cost.textContent   = '$' + fmtMoney.format(mean(costs));
-        el.fuel.textContent   = '$' + fmtMoney.format(mean(fuels));
+        el.income.textContent = '$' + fmtMoney.format(meanIncome);
+        el.cost.textContent   = '$' + fmtMoney.format(meanCost);
+        el.fuel.textContent   = '$' + fmtMoney.format(meanFuel);
+        el.visceralBureaucracy.textContent = '$' + fmtMoney.format(perdidaMensualFamilia) + ' CLP/mes';
+        el.visceralBureaucracyCopy.textContent = `Pesos perdidos por familia al mes por el solapamiento de ${CAPAS_SUPERPUESTAS} capas administrativas.`;
+        el.visceralFuelTax.textContent = `${porcentajeImpuestoEstanque.toFixed(2)}% del estanque`;
+        el.visceralAlert.textContent = `Tu comuna está pagando un sobrecosto promedio de ${fmtMoney.format(sobrecostoComunalM2)} CLP por metro cuadrado en plazas públicas civiles debido a cárteles de licitación locales.`;
 
         // Muestreo uniforme para el gráfico
         const sampledIncomes = (() => {
