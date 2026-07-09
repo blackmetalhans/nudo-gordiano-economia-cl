@@ -26,7 +26,7 @@ import sys
 try:
     import numpy as np
 except ImportError:
-    print("ERROR: numpy no está instalado. Ejecuta: pip install numpy", file=sys.stderr)
+    print("ERROR: numpy no está instalado. Ejecuta: pip install -r requirements.txt", file=sys.stderr)
     sys.exit(1)
 
 # ---------------------------------------------------------------------------
@@ -171,7 +171,7 @@ def parse_args(argv=None):
         metavar="PCT",
         help=(
             "Porcentaje de sobreprecio en obras municipales respecto al costo base. "
-            "Ej: 20 implica un 20%% de sobrecosto fraudulento."
+            "Ej: 20 implica un 20% de sobrecosto fraudulento."
         ),
     )
     p1.add_argument(
