@@ -149,7 +149,7 @@
         <p class="kpi-value" id="kpi-income">—</p>
       </article>
       <article class="card">
-        <p class="kpi-label">Costo obra municipal promedio ($/m&sup2; de obra)</p>
+        <p class="kpi-label">Costo obra municipal promedio ($ por m2 de obra)</p>
         <p class="kpi-value" id="kpi-cost">—</p>
       </article>
       <article class="card">
@@ -193,6 +193,7 @@
       canvas: document.getElementById('incomeChart')
     };
 
+    // Límite para mantener una visualización fluida y legible en canvas.
     const MAX_CHART_POINTS = 140;
     const mean = (arr) => {
       if (!arr.length) return 0;
@@ -325,12 +326,12 @@
           }
           const numericValues = [];
           for (let i = 0; i < cells.length; i += 1) {
-            const numberValue = Number(cells[i]);
-            if (!Number.isFinite(numberValue)) {
+            const parsedValue = Number(cells[i]);
+            if (!Number.isFinite(parsedValue)) {
               skippedRows += 1;
               return null;
             }
-            numericValues.push(numberValue);
+            numericValues.push(parsedValue);
           }
           return numericValues;
         }).filter(Boolean);
@@ -346,9 +347,16 @@
         el.cost.textContent = `$${fmtMoney.format(mean(costs))}`;
         el.fuel.textContent = `$${fmtMoney.format(mean(fuels))}`;
 
-        const sampled = incomes.length <= MAX_CHART_POINTS
-          ? incomes
-          : incomes.filter((_, i) => i % Math.floor(incomes.length / MAX_CHART_POINTS) === 0);
+        const sampled = (() => {
+          if (incomes.length <= MAX_CHART_POINTS) return incomes;
+          const stride = (incomes.length - 1) / (MAX_CHART_POINTS - 1);
+          const points = [];
+          for (let i = 0; i < MAX_CHART_POINTS; i += 1) {
+            const idx = Math.round(i * stride);
+            points.push(incomes[idx]);
+          }
+          return points;
+        })();
         drawLineChart(sampled);
 
         el.status.className = 'note';
