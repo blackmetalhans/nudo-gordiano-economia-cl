@@ -366,7 +366,7 @@
           $$\varepsilon_t \sim \mathcal{N}(0,\; 15^2) \quad\text{(ruido de mercado, CLP/litro)}$$
           $$\frac{\partial I_{neto}}{\partial B_t} = -\delta_E \cdot \alpha = -0.12 \times 8.4486 \approx -1.014 \text{ CLP/mes · barril/USD}$$
         </div>
-        <p>El impuesto específico base chileno equivale a \(\tau_0 \approx 222\) CLP/litro (≈6 UTM/m³ al valor UTM vigente). Cada +10 USD/barril en Brent erosiona ≈10.14 CLP/mes de ingreso neto.</p>
+        <p>El impuesto específico base chileno equivale a \(\tau_0 \approx 222\) CLP/litro (≈6 UTM/m³; referencia: UTM agosto 2024 = $65,927 CLP). Cada +10 USD/barril en Brent erosiona ≈10.14 CLP/mes de ingreso neto.</p>
 
         <!-- Pilar III -->
         <h3>Pilar III — Hipertrofia Burocrática</h3>
@@ -412,7 +412,7 @@
           </p>
         </div>
         <button class="btn-sci" id="openSciModal">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M9 2a7 7 0 100 14A7 7 0 009 2zm0 1.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zm.75 2.25h-1.5v4.5l3.75 2.25.75-1.25-3-1.8V5.75z"/></svg>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 2a1 1 0 000 2h.09l-2.8 7.5A3.5 3.5 0 107.9 16h4.2a3.5 3.5 0 102.61-4.5L12 6H13a1 1 0 000-2H7zm1.27 4h3.46l2.1 5.63A3.51 3.51 0 0013 12H7c-.29 0-.57.04-.83.1L8.27 6zM5.5 14a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm9 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
           Ver Formulación Científica
         </button>
       </div>
@@ -435,7 +435,7 @@
         <p class="kpi-value" id="kpi-cost">—</p>
       </article>
       <article class="card"
-        data-tip="Media de Precio_Surtidor_Litro (CLP/litro). Ecuación calibrada: 8.4486 × Brent + 550.93 + τ + ε. El impuesto específico base chileno es ≈6 UTM/m³ (≈222 CLP/litro).">
+        data-tip="Media de Precio_Surtidor_Litro (CLP/litro). Ecuación calibrada: 8.4486 × Brent + 550.93 + Δτ + ε. El impuesto específico base real chileno es ≈6 UTM/m³ (≈222 CLP/litro, ref. UTM ago-2024). Δτ=0 en el escenario base del simulador.">
         <p class="kpi-label">Precio surtidor promedio (litro)</p>
         <p class="kpi-value" id="kpi-fuel">—</p>
       </article>
@@ -449,7 +449,7 @@
           <strong>Fraude del Hormigón</strong><br/>Sobrecostos en licitaciones y su efecto regresivo.
         </article>
         <article class="card pillar"
-          data-tip="Traspaso del Brent al surtidor vía regresión lineal calibrada (α=8.4486 CLP/litro·barril/USD). El impuesto específico chileno base equivale a ≈6 UTM/m³ (≈222 CLP/litro). Canal energético = 12% del ingreso bruto.">
+          data-tip="Traspaso del Brent al surtidor vía regresión lineal calibrada (α=8.4486 CLP/litro·barril/USD). El impuesto específico base real chileno es ≈6 UTM/m³ (≈222 CLP/litro, ref. UTM ago-2024); Δτ=0 en el escenario base. Canal energético = 12% del ingreso bruto.">
           <strong>Exacción Energética</strong><br/>Impuesto específico + Brent como presión al consumo.
         </article>
         <article class="card pillar"
@@ -512,7 +512,7 @@
     const mean = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
     const stdDev = (arr, mu) => {
       if (arr.length < 2) return 0;
-      const variance = arr.reduce((s, v) => s + (v - mu) ** 2, 0) / arr.length;
+      const variance = arr.reduce((s, v) => s + (v - mu) ** 2, 0) / (arr.length - 1);
       return Math.sqrt(variance);
     };
 
@@ -523,7 +523,7 @@
       const dpr  = window.devicePixelRatio || 1;
       const rect = canvas.parentElement.getBoundingClientRect();
       const w    = Math.floor(rect.width);
-      const h    = Math.max(180, Math.floor(w * 0.28));   // ≈28% aspect, min 180px
+      const h    = Math.max(180, Math.floor(w * 0.28));   // 28% aspect keeps chart readable; 180px floor prevents collapse on narrow screens
       canvas.width  = w * dpr;
       canvas.height = h * dpr;
       canvas.style.width  = w + 'px';

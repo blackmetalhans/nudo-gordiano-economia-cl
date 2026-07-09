@@ -96,7 +96,7 @@ donde:
 - $B_t$ = precio spot del Brent en USD/barril en el período $t$
 - $\alpha = 8.4486$ CLP/litro por USD/barril (coeficiente de traspaso)
 - $\beta = 550.93$ CLP/litro (intercepto: costos de distribución y márgenes de refinación)
-- $\tau$ = impuesto específico adicional (CLP/litro); en la legislación chilena el impuesto base es equivalente a ≈6 UTM/m³ (≈$\tau_0 \approx 222$ CLP/litro al valor UTM vigente)
+- $\tau$ = impuesto específico **adicional** al escenario base (CLP/litro); parámetro del simulador con default `0`. El impuesto base chileno vigente ($\tau_0$) ya opera en la economía real: equivale a ≈6 UTM/m³ (referencia: UTM agosto 2024 = $65,927 CLP → $\tau_0 \approx 222$ CLP/litro); el simulador permite modelar variaciones $\Delta\tau$ sobre dicho nivel
 - $\varepsilon_t$ = ruido estocástico de mercado (volatilidad de margen)
 
 El impacto sobre el ingreso neto es:
@@ -355,7 +355,7 @@ python src/simulador.py --help
 
 | Argumento | Pilar | Descripción | Default |
 |---|---|---|---|
-| `--impuesto-especifico` | II – Exacción Energética | Impuesto adicional CLP/litro | `0` |
+| `--impuesto-especifico` | II – Exacción Energética | Incremento adicional Δτ sobre el impuesto base (CLP/litro). El impuesto base real (~222 CLP/litro) opera fuera del simulador. | `0` |
 | `--capas-burocraticas` | III – Hipertrofia Burocrática | N.° de capas administrativas | `5` |
 | `--sobreprecio-construccion` | I – Fraude del Hormigón | Sobreprecio % en obras | `0` |
 | `--brent-base` | IV – Commoditización | Precio medio Brent (USD/barril) | `75` |
