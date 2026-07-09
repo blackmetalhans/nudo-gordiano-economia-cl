@@ -372,7 +372,30 @@
       line-height: 1.5;
     }
     .hypothesis-list li strong { color: var(--text); }
-  </style>
+  
+    /* --- SCROLLBAR MINIMALISTA --- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(94, 234, 212, 0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(94, 234, 212, 0.7); }
+
+    /* --- MOTOR DE EXPORTACIÓN A PDF (PAPER-GRADE) --- */
+    @media print {
+        :root { --bg: #ffffff; --card: #ffffff; --text: #000000; --muted: #333333; }
+        body { background: #fff !important; color: #000 !important; }
+        /* Ocultar elementos interactivos */
+        .sci-btn, #status { display: none !important; }
+        /* Reset de tarjetas */
+        .card { break-inside: avoid; border: 1px solid #ccc; box-shadow: none; color: #000; }
+        /* Invertir el canvas para fondo blanco */
+        canvas { filter: invert(1); max-width: 100%; }
+        /* Desplegar el modal como un anexo estático en el documento impreso */
+        .modal-overlay { display: block !important; position: static !important; background: transparent; visibility: visible; opacity: 1; }
+        .modal-content { max-width: 100%; box-shadow: none; border: none; padding: 0; background: #fff; color: #000; }
+        .modal-close { display: none; }
+    }
+</style>
+
 </head>
 <body>
 
@@ -899,6 +922,18 @@ if(btnOpen && modalOverlay && btnClose) {
     });
 }
 document.querySelectorAll('.card[data-tip]').forEach(c => c.setAttribute('tabindex', '0'));
+
+
+// --- ENVIRONMENT CLEANER ---
+if (window.location.protocol.startsWith('http')) {
+    // Escanear el DOM buscando el tip de desarrollo para purgarlo en producción
+    const tags = document.querySelectorAll('*');
+    tags.forEach(el => {
+        if(el.textContent.includes('Tip: abre este archivo vía servidor local') && el.children.length === 0) {
+            el.style.display = 'none';
+        }
+    });
+}
 
 </script>
 </body>
