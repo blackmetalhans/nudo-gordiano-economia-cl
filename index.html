@@ -149,7 +149,7 @@
         <p class="kpi-value" id="kpi-income">—</p>
       </article>
       <article class="card">
-        <p class="kpi-label">Costo obra municipal promedio (m² de obra)</p>
+        <p class="kpi-label">Costo obra municipal promedio ($/m² de obra)</p>
         <p class="kpi-value" id="kpi-cost">—</p>
       </article>
       <article class="card">
@@ -224,7 +224,10 @@
       const max = Math.max(...values);
       const range = Math.max(max - min, 1);
 
-      const xAt = i => pad + ((w - pad * 2) * i) / (values.length - 1 || 1);
+      const xAt = (i) => {
+        if (values.length <= 1) return w / 2;
+        return pad + ((w - pad * 2) * i) / (values.length - 1);
+      };
       const yAt = v => h - pad - ((v - min) / range) * (h - pad * 2);
 
       const gradient = ctx.createLinearGradient(0, pad, 0, h - pad);
@@ -320,12 +323,12 @@
             skippedRows += 1;
             return null;
           }
-          const parsed = cells.map(value => Number(value));
-          if (!parsed.every(n => Number.isFinite(n))) {
+          const numericValues = cells.map(value => Number(value));
+          if (!numericValues.every(n => Number.isFinite(n))) {
             skippedRows += 1;
             return null;
           }
-          return parsed;
+          return numericValues;
         }).filter(Boolean);
 
         if (!data.length) throw new Error('CSV sin datos válidos.');
