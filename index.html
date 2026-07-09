@@ -149,7 +149,7 @@
         <p class="kpi-value" id="kpi-income">—</p>
       </article>
       <article class="card">
-        <p class="kpi-label">Costo obra municipal promedio (m²)</p>
+        <p class="kpi-label">Costo obra municipal promedio (m² de obra)</p>
         <p class="kpi-value" id="kpi-cost">—</p>
       </article>
       <article class="card">
@@ -193,7 +193,11 @@
       canvas: document.getElementById('incomeChart')
     };
 
-    const mean = arr => arr.reduce((a, b) => a + b, 0) / (arr.length || 1);
+    const MAX_CHART_POINTS = 140;
+    const mean = (arr) => {
+      if (!arr.length) return 0;
+      return arr.reduce((a, b) => a + b, 0) / arr.length;
+    };
 
     function drawLineChart(values) {
       const canvas = el.canvas;
@@ -317,7 +321,7 @@
             return null;
           }
           const parsed = cells.map(value => Number(value));
-          if (!parsed.every(Number.isFinite)) {
+          if (!parsed.every(n => Number.isFinite(n))) {
             skippedRows += 1;
             return null;
           }
@@ -335,7 +339,7 @@
         el.cost.textContent = `$${fmtMoney.format(mean(costs))}`;
         el.fuel.textContent = `$${fmtMoney.format(mean(fuels))}`;
 
-        const step = Math.max(1, Math.floor(incomes.length / 140));
+        const step = Math.max(1, Math.floor(incomes.length / MAX_CHART_POINTS));
         const sampled = incomes.filter((_, i) => i % step === 0);
         drawLineChart(sampled);
 
