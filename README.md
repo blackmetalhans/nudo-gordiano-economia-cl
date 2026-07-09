@@ -176,7 +176,7 @@ $$
 $$
 
 $$
-\text{Var}[\eta_t] = (0.12)^2 \cdot (15)^2 + (0.01)^2 \cdot (3{,}000)^2 = 3.24 + 9 = 12.24 \text{ CLP}^2
+\text{Var}[\eta_t] = (0.12)^2 \cdot (15)^2 + (0.01)^2 \cdot (3{,}000)^2 = 3.24 + 900 = 903.24 \text{ CLP}^2
 $$
 
 Los límites de control estadístico $\mu_I \pm 3\sigma_I$ (bandas $3\sigma$) de la serie de ingreso neto engloban la dispersión simulada en el gráfico de la interfaz web.
@@ -301,7 +301,7 @@ $$
 $$
 
 $$
-\mathbb{E}[I_{neto}] = 650{,}100 - 0.12 \times 1{,}184.58 - 0.01 \times 30{,}000 \approx 507{,}350 \text{ CLP/mes}
+\mathbb{E}[I_{neto}] = 650{,}100 - 0.12 \times 1{,}184.58 - 0.01 \times 30{,}000 \approx 649{,}658 \text{ CLP/mes}
 $$
 
 La simulación es consistente con la hipótesis: la combinación de sobreprecio + fricción institucional genera presión sistemática y persistente sobre el ingreso real.

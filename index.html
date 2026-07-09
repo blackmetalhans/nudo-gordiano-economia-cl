@@ -113,7 +113,8 @@
 
     .card[data-tip] { cursor: help; }
 
-    .card[data-tip]:hover::after {
+    .card[data-tip]:hover::after,
+.card[data-tip]:focus-visible::after {
       content: attr(data-tip);
       position: absolute;
       bottom: calc(100% + 8px);
@@ -134,7 +135,8 @@
       white-space: normal;
     }
     /* Arrow del tooltip */
-    .card[data-tip]:hover::before {
+    .card[data-tip]:hover::before,
+.card[data-tip]:focus-visible::before {
       content: '';
       position: absolute;
       bottom: calc(100% + 2px);
@@ -413,7 +415,7 @@
           $$\varepsilon_t \sim \mathcal{N}(0,\; 15^2) \quad\text{(ruido de mercado, CLP/litro)}$$
           $$\frac{\partial I_{neto}}{\partial B_t} = -\delta_E \cdot \alpha = -0.12 \times 8.4486 \approx -1.014 \text{ CLP/mes · barril/USD}$$
         </div>
-        <p>El impuesto específico base chileno equivale a \(\tau_0 \approx 222\) CLP/litro (≈6 UTM/m³; referencia: UTM agosto 2024 = $65,927 CLP). Cada +10 USD/barril en Brent erosiona ≈10.14 CLP/mes de ingreso neto.</p>
+        <p>El impuesto específico base chileno equivale a \(\tau_0 \approx 222\) CLP/litro (≈6 UTM/m³; referencia: UTM agosto 2024 = 65.927 CLP). Cada +10 USD/barril en Brent erosiona ≈10.14 CLP/mes de ingreso neto.</p>
 
         <!-- Pilar III -->
         <h3>Pilar III — Hipertrofia Burocrática</h3>
@@ -431,7 +433,7 @@
         <div class="eq-block">
           $$B_t \sim \mathcal{N}(\mu_B,\; \sigma_B^2), \quad B_t \geq 20, \quad \mu_B=75\text{ USD}, \;\sigma_B=12\text{ USD}$$
           $$I_{neto,t} = \underbrace{\!\left[Y_0 \cdot \mathcal{E}(k) - \delta_E(\beta+\tau) - \delta_C\mu_{m^2}^{eff}\right]\!}_{\mu_I} - \underbrace{\delta_E\alpha}_{\phi=1.014} \cdot B_t \;+\; \eta_t$$
-          $$\text{Var}[\eta_t] = \delta_E^2\sigma_\varepsilon^2 + \delta_C^2\sigma_{m^2}^2 = 3.24 + 9 = 12.24 \text{ CLP}^2$$
+          $$\text{Var}[\eta_t] = \delta_E^2\sigma_\varepsilon^2 + \delta_C^2\sigma_{m^2}^2 = 3.24 + 900 = 903.24 \text{ CLP}^2$$
         </div>
         <p>Las bandas de control estadístico \(\mu_I \pm 3\sigma_I\) delimitan el rango esperado del ingreso neto en el gráfico de la interfaz.</p>
 
@@ -880,6 +882,24 @@
     }
 
     loadData();
-  </script>
+  
+// --- INYECCIÓN DE ACCESIBILIDAD ---
+const btnOpen = document.getElementById('openSciModal');
+const modalOverlay = document.getElementById('sciModal');
+const btnClose = document.getElementById('modalClose');
+
+if(btnOpen && modalOverlay && btnClose) {
+    btnOpen.addEventListener('click', () => {
+        modalOverlay.classList.add('open');
+        setTimeout(() => btnClose.focus(), 50);
+    });
+    btnClose.addEventListener('click', () => {
+        modalOverlay.classList.remove('open');
+        btnOpen.focus();
+    });
+}
+document.querySelectorAll('.card[data-tip]').forEach(c => c.setAttribute('tabindex', '0'));
+
+</script>
 </body>
 </html>
