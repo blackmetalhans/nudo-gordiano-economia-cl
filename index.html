@@ -257,6 +257,39 @@
       ctx.fillText(`Max: ${fmtMoney.format(max)}`, w - pad - 140, h - 10);
     }
 
+    function splitCsvLine(line) {
+      const out = [];
+      let current = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < line.length; i += 1) {
+        const char = line[i];
+        const next = line[i + 1];
+
+        if (char === '"' && inQuotes && next === '"') {
+          current += '"';
+          i += 1;
+          continue;
+        }
+
+        if (char === '"') {
+          inQuotes = !inQuotes;
+          continue;
+        }
+
+        if (char === ',' && !inQuotes) {
+          out.push(current);
+          current = '';
+          continue;
+        }
+
+        current += char;
+      }
+
+      out.push(current);
+      return out;
+    }
+
     async function loadData() {
       try {
         const res = await fetch('data/simulacion_base.csv', { cache: 'no-store' });
@@ -264,7 +297,7 @@
 
         const raw = await res.text();
         const rows = raw.trim().split(/\r?\n/);
-        const headers = rows[0].split(',');
+        const headers = splitCsvLine(rows[0]);
 
         const idx = {
           fuel: headers.indexOf('Precio_Surtidor_Litro'),
@@ -276,7 +309,21 @@
           throw new Error('Columnas esperadas no encontradas en CSV.');
         }
 
-        const data = rows.slice(1).map(line => line.split(',').map(Number)).filter(r => r.every(Number.isFinite));
+        let skippedRows = 0;
+        const data = rows.slice(1).map((line) => {
+          const cells = splitCsvLine(line);
+          if (cells.length !== headers.length) {
+            skippedRows += 1;
+            return null;
+          }
+          const parsed = cells.map(value => Number(value));
+          if (!parsed.every(Number.isFinite)) {
+            skippedRows += 1;
+            return null;
+          }
+          return parsed;
+        }).filter(Boolean);
+
         if (!data.length) throw new Error('CSV sin datos válidos.');
 
         const incomes = data.map(r => r[idx.income]);
@@ -293,7 +340,9 @@
         drawLineChart(sampled);
 
         el.status.className = 'note';
-        el.status.textContent = 'Datos cargados correctamente. Visualización activa.';
+        el.status.textContent = skippedRows
+          ? `Datos cargados con ${fmtInt.format(skippedRows)} fila(s) omitidas por formato inválido.`
+          : 'Datos cargados correctamente. Visualización activa.';
       } catch (error) {
         el.status.className = 'note warn';
         el.status.textContent = `No fue posible cargar datos automáticamente (${error.message}). Abre con servidor local.`;
