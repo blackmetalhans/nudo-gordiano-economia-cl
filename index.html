@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Nudo Gordiano | Derroche Fiscal en Chile</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121a33;
+      --muted: #9aa4c7;
+      --text: #e8ecff;
+      --accent: #5eead4;
+      --accent2: #60a5fa;
+      --danger: #fb7185;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% -10%, #1f2a52, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1100px, 92vw);
+      margin: 0 auto;
+      padding: 42px 0 56px;
+    }
+
+    .hero {
+      background: linear-gradient(160deg, rgba(96, 165, 250, 0.12), rgba(94, 234, 212, 0.08));
+      border: 1px solid rgba(154, 164, 199, 0.25);
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.1;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      max-width: 72ch;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      margin: 18px 0 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(154, 164, 199, 0.2);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+
+    .kpi-value {
+      font-size: 1.5rem;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .section-title {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .pillar strong { color: var(--accent); }
+
+    .chart-box {
+      background: var(--card);
+      border: 1px solid rgba(154, 164, 199, 0.2);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    canvas {
+      width: 100%;
+      height: 220px;
+      display: block;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(96, 165, 250, 0.06), rgba(96, 165, 250, 0.01));
+    }
+
+    .note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .footer {
+      margin-top: 26px;
+      font-size: 0.92rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(154, 164, 199, 0.2);
+      padding-top: 14px;
+    }
+
+    .loading { color: var(--accent2); }
+    .warn { color: var(--danger); }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>El Nudo Gordiano: Derroche Fiscal en Chile</h1>
+      <p class="sub">
+        Visualización ejecutiva del paper: simulación sobre cómo sobrecostos públicos, presión energética e
+        ineficiencia estatal impactan el ingreso neto real del ciudadano.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <p class="kpi-label">Escenarios simulados</p>
+        <p class="kpi-value" id="kpi-count">—</p>
+      </article>
+      <article class="card">
+        <p class="kpi-label">Ingreso neto real promedio</p>
+        <p class="kpi-value" id="kpi-income">—</p>
+      </article>
+      <article class="card">
+        <p class="kpi-label">Costo obra municipal promedio (m²)</p>
+        <p class="kpi-value" id="kpi-cost">—</p>
+      </article>
+      <article class="card">
+        <p class="kpi-label">Precio surtidor promedio (litro)</p>
+        <p class="kpi-value" id="kpi-fuel">—</p>
+      </article>
+    </section>
+
+    <section>
+      <h2 class="section-title">4 pilares del modelo</h2>
+      <div class="pillars">
+        <article class="card pillar"><strong>Fraude del Hormigón</strong><br/>Sobrecostos en licitaciones y su efecto regresivo.</article>
+        <article class="card pillar"><strong>Exacción Energética</strong><br/>Impuesto específico + Brent como presión al consumo.</article>
+        <article class="card pillar"><strong>Hipertrofia Burocrática</strong><br/>Capas administrativas que reducen eficiencia fiscal.</article>
+        <article class="card pillar"><strong>Commoditización</strong><br/>Dependencia externa y vulnerabilidad a shocks.</article>
+      </div>
+    </section>
+
+    <section class="chart-box">
+      <h2 class="section-title">Tendencia del ingreso neto real (muestra)</h2>
+      <canvas id="incomeChart" width="1000" height="260" aria-label="Gráfico del ingreso neto real"></canvas>
+      <p id="status" class="note loading">Cargando datos desde <code>data/simulacion_base.csv</code>…</p>
+      <p class="note">Tip: abre este archivo vía servidor local para habilitar la carga de CSV en navegadores con políticas estrictas.</p>
+    </section>
+
+    <footer class="footer">
+      Repositorio: <strong>blackmetalhans/nudo-gordiano-economia-cl</strong> · Documento principal: <code>README.md</code>
+    </footer>
+  </main>
+
+  <script>
+    const fmtInt = new Intl.NumberFormat('es-CL');
+    const fmtMoney = new Intl.NumberFormat('es-CL', { maximumFractionDigits: 0 });
+
+    const el = {
+      count: document.getElementById('kpi-count'),
+      income: document.getElementById('kpi-income'),
+      cost: document.getElementById('kpi-cost'),
+      fuel: document.getElementById('kpi-fuel'),
+      status: document.getElementById('status'),
+      canvas: document.getElementById('incomeChart')
+    };
+
+    const mean = arr => arr.reduce((a, b) => a + b, 0) / (arr.length || 1);
+
+    function drawLineChart(values) {
+      const canvas = el.canvas;
+      const ctx = canvas.getContext('2d');
+      if (!ctx || !values.length) return;
+
+      const w = canvas.width;
+      const h = canvas.height;
+      const pad = 34;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(154, 164, 199, 0.35)';
+      ctx.lineWidth = 1;
+
+      for (let i = 0; i <= 4; i += 1) {
+        const y = pad + ((h - pad * 2) * i) / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad, y);
+        ctx.lineTo(w - pad, y);
+        ctx.stroke();
+      }
+
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const range = Math.max(max - min, 1);
+
+      const xAt = i => pad + ((w - pad * 2) * i) / (values.length - 1 || 1);
+      const yAt = v => h - pad - ((v - min) / range) * (h - pad * 2);
+
+      const gradient = ctx.createLinearGradient(0, pad, 0, h - pad);
+      gradient.addColorStop(0, 'rgba(94, 234, 212, 0.35)');
+      gradient.addColorStop(1, 'rgba(94, 234, 212, 0.02)');
+
+      ctx.beginPath();
+      values.forEach((v, i) => {
+        const x = xAt(i);
+        const y = yAt(v);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.lineTo(xAt(values.length - 1), h - pad);
+      ctx.lineTo(xAt(0), h - pad);
+      ctx.closePath();
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.beginPath();
+      values.forEach((v, i) => {
+        const x = xAt(i);
+        const y = yAt(v);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = '#5eead4';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#9aa4c7';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText(`Min: ${fmtMoney.format(min)}`, pad, h - 10);
+      ctx.fillText(`Max: ${fmtMoney.format(max)}`, w - pad - 140, h - 10);
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch('data/simulacion_base.csv', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const raw = await res.text();
+        const rows = raw.trim().split(/\r?\n/);
+        const headers = rows[0].split(',');
+
+        const idx = {
+          fuel: headers.indexOf('Precio_Surtidor_Litro'),
+          cost: headers.indexOf('Costo_M2_Obra_Muni'),
+          income: headers.indexOf('Ingreso_Neto_Real_Ciudadano')
+        };
+
+        if (Object.values(idx).some(v => v < 0)) {
+          throw new Error('Columnas esperadas no encontradas en CSV.');
+        }
+
+        const data = rows.slice(1).map(line => line.split(',').map(Number)).filter(r => r.every(Number.isFinite));
+        if (!data.length) throw new Error('CSV sin datos válidos.');
+
+        const incomes = data.map(r => r[idx.income]);
+        const costs = data.map(r => r[idx.cost]);
+        const fuels = data.map(r => r[idx.fuel]);
+
+        el.count.textContent = fmtInt.format(data.length);
+        el.income.textContent = `$${fmtMoney.format(mean(incomes))}`;
+        el.cost.textContent = `$${fmtMoney.format(mean(costs))}`;
+        el.fuel.textContent = `$${fmtMoney.format(mean(fuels))}`;
+
+        const step = Math.max(1, Math.floor(incomes.length / 140));
+        const sampled = incomes.filter((_, i) => i % step === 0);
+        drawLineChart(sampled);
+
+        el.status.className = 'note';
+        el.status.textContent = 'Datos cargados correctamente. Visualización activa.';
+      } catch (error) {
+        el.status.className = 'note warn';
+        el.status.textContent = `No fue posible cargar datos automáticamente (${error.message}). Abre con servidor local.`;
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
