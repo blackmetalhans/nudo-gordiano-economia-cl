@@ -14,43 +14,42 @@ $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} -
 
 ---
 
-## Índice de Navegación Detallado
+## Índice de Navegación
 * [**Ecuación Fundamental de Bienestar**](#**ecuación-fundamental-de-bienestar**)
 * [**Índice de Navegación**](#**índice-de-navegación**)
-* [**1\. Marco Teórico y Formulación Estocástica**](#**1\-marco-teórico-y-formulación-estocástica**)
-* [**ºLos Cuatro Pilares del Estancamiento**](#**ºlos-cuatro-pilares-del-estancamiento**)
-* [**2\. Arquitectura de Datos (CI/CD Pipeline)**](#**2\-arquitectura-de-datos-(ci/cd-pipeline)**)
-* [**3\. Reproducibilidad Local**](#**3\-reproducibilidad-local**)
-* [Archivo Histórico Recuperado](#archivo-histórico-recuperado)
+* [**1\. Marco Teórico y Formulación Estocástica**](#**1-marco-teórico-y-formulación-estocástica**)
+  * [**ºLos Cuatro Pilares del Estancamiento**](#**ºlos-cuatro-pilares-del-estancamiento**)
+* [**2\. Arquitectura de Datos (CI/CD Pipeline)**](#**2-arquitectura-de-datos-(ci/cd-pipeline)**)
+* [**3\. Reproducibilidad Local**](#**3-reproducibilidad-local**)
+  * [Archivo Histórico Recuperado](#archivo-histórico-recuperado)
 * [📄 Abstract](#📄-abstract)
 * [Clasificación JEL](#clasificación-jel)
 * [Resumen / Abstract](#resumen-/-abstract)
 * [Pregunta de Investigación](#pregunta-de-investigación)
 * [Metodología y Formalización Matemática](#metodología-y-formalización-matemática)
-* [Pilar I — Fraude del Hormigón](#pilar-i-—-fraude-del-hormigón)
-* [Pilar II — Exacción Energética](#pilar-ii-—-exacción-energética)
-* [Pilar III — Hipertrofia Burocrática](#pilar-iii-—-hipertrofia-burocrática)
-* [Pilar IV — Commoditización](#pilar-iv-—-commoditización)
+  * [Pilar I — Fraude del Hormigón](#pilar-i-—-fraude-del-hormigón)
+  * [Pilar II — Exacción Energética](#pilar-ii-—-exacción-energética)
+  * [Pilar III — Hipertrofia Burocrática](#pilar-iii-—-hipertrofia-burocrática)
+  * [Pilar IV — Commoditización](#pilar-iv-—-commoditización)
 * [Estructura del Repositorio](#estructura-del-repositorio)
-* [Variables del dataset (`data/simulacion_base.csv`)](#variables-del-dataset-(`data/simulacion_basecsv`))
+  * [Variables del dataset (`data/simulacion_base.csv`)](#variables-del-dataset-(`data/simulacion_basecsv`))
 * [Arquitectura CI/CD: Pipeline de Datos Automatizado](#arquitectura-ci/cd:-pipeline-de-datos-automatizado)
-* [Diagrama de flujo del pipeline](#diagrama-de-flujo-del-pipeline)
-* [Mecanismos de activación](#mecanismos-de-activación)
-* [Parametrización dinámica via `workflow_dispatch`](#parametrización-dinámica-via-`workflow_dispatch`)
-* [Reproducibilidad determinística](#reproducibilidad-determinística)
+  * [Diagrama de flujo del pipeline](#diagrama-de-flujo-del-pipeline)
+  * [Mecanismos de activación](#mecanismos-de-activación)
+  * [Parametrización dinámica via `workflow_dispatch`](#parametrización-dinámica-via-`workflow_dispatch`)
+  * [Reproducibilidad determinística](#reproducibilidad-determinística)
 * [Resultados Base](#resultados-base)
 * [Implicancias de Política Pública](#implicancias-de-política-pública)
 * [Motor de Simulación (`src/simulador.py`)](#motor-de-simulación-(`src/simuladorpy`))
-* [Instalación](#instalación)
-* [Uso](#uso)
-* [Parámetros principales](#parámetros-principales)
-* [Ejecución visual (interfaz web)](#ejecución-visual-(interfaz-web))
+  * [Instalación](#instalación)
+  * [Uso](#uso)
+  * [Parámetros principales](#parámetros-principales)
+  * [Ejecución visual (interfaz web)](#ejecución-visual-(interfaz-web))
 * [Próximos Pasos](#próximos-pasos)
 * [⚙️ Reproducibilidad Computacional](#⚙️-reproducibilidad-computacional)
 * [🛠️ Infraestructura de Automatización (Live Engine)](#🛠️-infraestructura-de-automatización-(live-engine))
 
 ---
-
 
 [![Executable Paper](https://img.shields.io/badge/Paper-Executable-blue.svg)](https://blackmetalhans.github.io/nudo-gordiano-economia-cl/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -72,9 +71,6 @@ $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} -
 * [3\. Reproducibilidad Local](#3\-reproducibilidad-local)
 
 ---
-
-
-
 
 *Autor: Hans Soriano | Estado: Producción (v3.0.0-integral)*
 
@@ -145,8 +141,6 @@ La inferencia visual (interactiva) se encuentra encapsulada directamente en inde
 ---
 ### Archivo Histórico Recuperado
 
-
-
 > [!CAUTION]
 > ### ⚠️ ALERTA DE SISTEMA: ENTROPÍA ECONÓMICA DETECTADA
 > **Este documento no es una simple simulación; es la autopsia en tiempo real del poder adquisitivo bajo fricción fiscal en Chile.** 
@@ -162,7 +156,6 @@ El Nudo Gordiano: Anatomía del Derroche Fiscal en Chile
 
 ## 📄 Abstract
 Este repositorio formaliza un modelo estocástico de fricción fiscal aplicado a la economía chilena, estructurado como un *Executable Paper*. Mediante simulaciones de Monte Carlo, cuantifica la erosión del ingreso neto real a través de cuatro vectores ortogonales: hipertrofia de gobernanza ($k$-capas), varianza en costos de infraestructura pública, exacción tributaria energética y shocks exógenos de *commodities* (Brent). La arquitectura permite auditoría matemática directa y reproducibilidad determinista de la inferencia.
-
 
 **Tipo:** Paper Aplicado · Simulación Estocástica · Economía Pública  
 **Formato:** Executable Paper (código + datos + visualización reproducible)  
@@ -495,12 +488,9 @@ pip install -r requirements.txt
 
 python src/simulador.py
 
-
 python src/simulador.py --impuesto-especifico 150
 
-
 python src/simulador.py --capas-burocraticas 8
-
 
 python src/simulador.py \
   --impuesto-especifico 200 \
@@ -508,9 +498,7 @@ python src/simulador.py \
   --sobreprecio-construccion 25 \
   --brent-base 95
 
-
 python src/simulador.py --capas-burocraticas 10 --output /tmp/escenario_extremo.csv
-
 
 python src/simulador.py --help
 ```
@@ -556,9 +544,7 @@ cd nudo-gordiano-economia-cl
 python -m venv venv
 source venv/bin/activate  # o venv\Scripts\activate en Windows
 
-
 pip install numpy pandas scipy
-
 
 python src/simulador.py --iterations 10000 --seed 42
 ```
