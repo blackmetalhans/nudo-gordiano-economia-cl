@@ -8,81 +8,81 @@
     <script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
     <style>
         :root { --danger: #ff003c; --terminal: #00ff41; --bg: #050505; }
-        body { background: var(--bg); color: var(--terminal); font-family: 'Courier New', monospace; margin: 0; line-height: 1.2; }
-        body::after { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px); pointer-events: none; z-index: 10; }
-        .crt-header { padding: 40px; border-bottom: 3px double var(--danger); text-align: left; }
-        h1 { font-size: 5rem; margin: 0; color: var(--danger); letter-spacing: -5px; filter: blur(0.5px); }
-        .academic-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 40px; }
-        .abstract-box { border: 1px solid var(--terminal); padding: 25px; background: rgba(0, 255, 65, 0.05); }
-        h2 { text-transform: uppercase; border-bottom: 1px solid var(--terminal); padding-bottom: 10px; color: var(--danger); }
-        .latex-block { background: #000; padding: 20px; border-left: 5px solid var(--danger); margin: 20px 0; font-size: 1.2rem; }
-        .pilar { margin-bottom: 30px; }
-        .pilar b { color: var(--danger); display: block; font-size: 1.1rem; }
-        canvas { border: 1px solid #333; background: #000; margin-top: 20px; }
-        .sidebar { border-left: 1px solid #333; padding-left: 20px; }
+        body { background: var(--bg); color: var(--terminal); font-family: 'Courier New', monospace; margin: 0; line-height: 1.2; overflow-x: hidden; }
+        body::before { content: ' '; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 9999; pointer-events: none; background-size: 100% 2px, 3px 100%; }
+        .header-crt { padding: 40px; border-bottom: 3px double var(--danger); text-shadow: 0 0 10px var(--danger); }
+        h1 { font-size: 5rem; margin: 0; color: var(--danger); letter-spacing: -5px; }
+        .academic-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; padding: 40px; }
+        .abstract-section { border: 1px solid var(--terminal); padding: 30px; background: rgba(0, 255, 65, 0.05); text-align: justify; }
+        h2 { text-transform: uppercase; color: var(--danger); border-left: 10px solid var(--danger); padding-left: 15px; margin-top: 40px; }
+        .latex-box { background: #000; padding: 30px; border: 1px solid var(--danger); margin: 20px 0; font-size: 1.4rem; color: #fff; text-align: center; }
+        .pilar-card { margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .pilar-card b { color: var(--danger); font-size: 1.2rem; }
+        canvas { background: #000; border: 1px solid #333; }
     </style>
 </head>
 <body>
-    <div class='crt-header'>
+    <div class='header-crt'>
         <h1>EL NUDO GORDIANO</h1>
-        <p>[ SISTEMA DE MONITOREO DE ENTROPÍA FISCAL - v2.4.0 ]</p>
+        <p>[ ESTADO: AUTOPSIA SISTÉMICA EN PROGRESO ]</p>
     </div>
 
-    <div class='academic-container'>
-        <div class='content-main'>
-            <div class='abstract-box'>
+    <div class='academic-grid'>
+        <div class='main-science'>
+            <div class='abstract-section'>
                 <h2>Abstract Científico</h2>
-                <p>Este proyecto formaliza la degradación del capital real mediante una <b>Inferencia Estocástica</b>. El modelo modela la entropía generada por la fricción estatal en Chile, utilizando una función de transferencia de valor nominal a pérdida real indexada por vectores de ineficiencia estructural.</p>
-                <p>La metodología emplea simulaciones de Monte Carlo para computar la varianza del poder adquisitivo residual ($$P_r$$) frente a choques discretos en la matriz energética y la hipertrofia burocrática local.</p>
+                <p>Este estudio formaliza la degradación del capital real mediante una <b>Inferencia Estocástica</b> de la fricción fiscal en Chile. El modelo computa la entropía generada por la ineficiencia estructural, transformando datos nominales en proyecciones de erosión real indexadas por vectores de opacidad municipal y exacción energética.</p>
+                <p>Utilizando simulaciones de Monte Carlo, cuantificamos la varianza del poder adquisitivo residual ($$P_r$$) frente a shocks de 'Cisne Negro' y la hipertrofia burocrática del periodo 2019-2024.</p>
             </div>
 
-            <h2>Metodología y Ecuación de Fricción</h2>
-            <div class='latex-block'>
-                $$ \Delta K = \int_{t_0}^{t_1} (f_{Hormigón} + e_{Energía} + b_{Burocracia}) dt + \epsilon_{BlackSwan} $$
+            <h2>Marco Teórico y Ecuación de Fricción</h2>
+            <div class='latex-box'>
+                $$ \Delta K_{erosion} = \sum_{t=0}^{n} [f_{Hormigón} + e_{Energía} + b_{Burocracia}] \cdot \delta t + \epsilon $$
             </div>
-            <p>Se asume que la formación de capital está inversamente correlacionada con la opacidad en el gasto municipal (Fraude del Hormigón) y la exacción vía impuestos específicos.</p>
 
-            <div class='pilar'>
-                <b>1. PILAR: FRAUDE DEL HORMIGÓN</b>
-                Formalización del sobreprecio estructural en infraestructura pública municipal. Cada peso desviado incrementa la entropía del sistema civil.
+            <h2>Pilares de Análisis</h2>
+            <div class='pilar-card'>
+                <b>I. Fraude del Hormigón:</b> Modelado del sobreprecio estructural en infraestructura pública y su impacto en la formación de capital civil.
             </div>
-            <div class='pilar'>
-                <b>2. PILAR: EXACCIÓN ENERGÉTICA</b>
-                Impacto del Brent e Impuesto Específico. La energía no es un costo, es un vector de exacción que drena la liquidez operativa del sector privado.
+            <div class='pilar-card'>
+                <b>II. Exacción Energética:</b> Análisis de la elasticidad-precio frente al Impuesto Específico y su drenaje en la liquidez operativa.
+            </div>
+            <div class='pilar-card'>
+                <b>III. Hipertrofia Burocrática:</b> Cálculo del costo de oportunidad estatal y la parálisis por ineficiencia administrativa.
             </div>
         </div>
 
-        <div class='sidebar'>
-            <h2>Telemetría en Vivo</h2>
-            <canvas id='mainChart'></canvas>
-            <p style='margin-top:30px;'><b>INDICADORES DE PRESIÓN:</b></p>
-            <div style='font-size: 3rem; color: var(--danger);'>$40.844</div>
-            <p>UF ACTUAL (PASIVO SISTÉMICO)</p>
-            <div style='font-size: 2.5rem;'>$935.71</div>
-            <p>USD/CLP (FUGA DE VALOR)</p>
-            
-            <div class='abstract-box' style='margin-top:40px; border-color: var(--danger);'>
-                <b style='color: var(--danger)'>[!] NOTA TÉCNICA:</b>
-                La simulación de Monte Carlo en este dashboard utiliza 10,000 iteraciones diarias para recalibrar los intervalos de confianza del colapso del poder de compra.
+        <div class='telemetry'>
+            <h2>Telemetría Visual</h2>
+            <canvas id='priceChart'></canvas>
+            <div style='margin-top:40px;'>
+                <p class='label'>UF ACTUAL (PASIVO REAL):</p>
+                <div style='font-size: 3.5rem; color: var(--danger);'>$40.844</div>
+                <p class='label' style='margin-top:20px;'>DÓLAR (ÍNDICE DE FUGA):</p>
+                <div style='font-size: 3rem;'>$935.71</div>
+            </div>
+            <div class='abstract-section' style='margin-top:40px; border-color: var(--danger);'>
+                <b style='color: var(--danger)'>[!] ADVERTENCIA TÉCNICA:</b>
+                Los intervalos de confianza del modelo sugieren una convergencia hacia la insolvencia del poder adquisitivo si los vectores de fricción no son neutralizados.
             </div>
         </div>
     </div>
 
     <script>
-        const ctx = document.getElementById('mainChart').getContext('2d');
+        const ctx = document.getElementById('priceChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
                 datasets: [{
-                    label: 'ENTROPÍA FISCAL (IPC ACUM)',
-                    data: [3, 8, 15, 28, 40, 48], borderColor: '#ff003c', fill: false, borderWidth: 4
+                    label: 'ENTROPÍA FISCAL (%)',
+                    data: [5, 12, 22, 35, 42, 51], borderColor: '#ff003c', borderWidth: 4, fill: false
                 }, {
-                    label: 'CAPITAL REAL RESIDUAL',
-                    data: [100, 92, 80, 65, 55, 49], borderColor: '#00ff41', borderDash: [5, 5]
+                    label: 'CAPITAL REAL',
+                    data: [100, 88, 75, 60, 52, 44], borderColor: '#00ff41', borderDash: [5, 5]
                 }]
             },
-            options: { responsive: true, plugins: { legend: { labels: { color: '#00ff41' } } } }
+            options: { responsive: true, plugins: { legend: { labels: { color: '#00ff41', font: { family: 'Courier New' } } } } }
         });
     </script>
 </body>
