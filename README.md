@@ -26,7 +26,6 @@ $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} -
 
 *Autor: Hans Soriano | Estado: Producción (v3.0.0-integral)*
 
-Este repositorio constituye un **Executable Paper**. Su objetivo es cuantificar matemáticamente la histéresis del desarrollo en Chile, modelando el colapso de la Productividad Total de Factores (PTF) desde la perspectiva del ingreso neto ciudadano (). El modelo abandona el análisis discursivo tradicional para plantear un sistema de ecuaciones estocásticas calibrables y auditables en tiempo real.
 
 ## **1\. Marco Teórico y Formulación Estocástica**
 
