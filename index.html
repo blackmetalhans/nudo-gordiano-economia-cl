@@ -90,7 +90,6 @@
     </div>
 
     <script>
-        // Lógica de Gráficos
         const commonOptions = { responsive: true, plugins: { legend: { labels: { color: '#00ff41', font: { family: 'Courier New' } } } } };
         
         const ctx1 = document.getElementById('priceChart').getContext('2d');
@@ -98,7 +97,7 @@
             type: 'line',
             data: {
                 labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
-                datasets: [{ label: 'IPC (%)', data: [5, 12, 28, 42, 55, 62], borderColor: '#ff003c' }]
+                datasets: [{ label: 'IPC ACUMULADO (%)', data: [5, 12, 28, 42, 55, 62], borderColor: '#ff003c' }]
             }, options: commonOptions
         });
 
