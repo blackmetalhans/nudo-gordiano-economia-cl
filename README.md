@@ -1,23 +1,33 @@
+# El Nudo Gordiano de la Economía Chilena
+
+Modelado Estocástico de Ineficiencias Estructurales y Pérdida de Bienestar Agregado
+Autor: Hans Soriano | Estado: Producción (v3.0.0-integral)
+
+Este repositorio constituye un Executable Paper. Su objetivo es cuantificar matemáticamente la histéresis del desarrollo en Chile, modelando el colapso de la Productividad Total de Factores (PTF) desde la perspectiva del ingreso neto ciudadano ($I_{neto}$). El modelo abandona el análisis discursivo tradicional para plantear un sistema de ecuaciones estocásticas calibrables y auditables en tiempo real.
+
+
+---
+
 # **El Nudo Gordiano de la Economía Chilena**
 
 **Modelado Estocástico de Ineficiencias Estructurales y Pérdida de Bienestar Agregado**
 
 *Autor: Hans Soriano | Estado: Producción (v3.0.0-integral)*
 
-Este repositorio constituye un **Executable Paper**. Su objetivo es cuantificar matemáticamente la histéresis del desarrollo en Chile, modelando el colapso de la Productividad Total de Factores (PTF) desde la perspectiva del ingreso neto ciudadano (![][image1]). El modelo abandona el análisis discursivo tradicional para plantear un sistema de ecuaciones estocásticas calibrables y auditables en tiempo real.
+Este repositorio constituye un **Executable Paper**. Su objetivo es cuantificar matemáticamente la histéresis del desarrollo en Chile, modelando el colapso de la Productividad Total de Factores (PTF) desde la perspectiva del ingreso neto ciudadano (). El modelo abandona el análisis discursivo tradicional para plantear un sistema de ecuaciones estocásticas calibrables y auditables en tiempo real.
 
 ## **1\. Marco Teórico y Formulación Estocástica**
 
-El sistema asume que el ingreso ciudadano está sujeto a un vector de fricciones institucionales y de mercado. La ecuación fundamental de transferencia de bienestar define la esperanza matemática del ingreso en el periodo ![][image2] como:
+El sistema asume que el ingreso ciudadano está sujeto a un vector de fricciones institucionales y de mercado. La ecuación fundamental de transferencia de bienestar define la esperanza matemática del ingreso en el periodo  como:
 
-![][image3]Donde la varianza del sistema (ruido blanco amplificado por fallas de mercado) está dada por:
+Donde la varianza del sistema (ruido blanco amplificado por fallas de mercado) está dada por:
 
 ### **ºLos Cuatro Pilares del Estancamiento**
 
-1. **Hipertrofia Burocrática (![][image4]):** El costo de agencia estatal se modela como una función de decrecimiento ![][image5]. La línea base chilena (![][image6]) destruye masivamente el rendimiento productivo óptimo antes de que el capital fluya hacia la economía real.  
-2. **Exacción Inmobiliaria (![][image7]):** La desviación especulativa del suelo se modela como ![][image8]. Este sobreprecio drena liquidez del sector productivo hacia la acumulación pasiva de capital rentista.  
-3. **Indexación Asimétrica Energética (![][image9]):** El impuesto específico opera como una cuña fiscal profundamente regresiva que encarece de manera transversal toda la matriz logística nacional.  
-4. **Commoditización (Brent ![][image10]):** Proceso estocástico del valor del crudo acoplado directamente al consumo interno, exponiendo la falta de complejidad económica local.
+1. **Hipertrofia Burocrática ():** El costo de agencia estatal se modela como una función de decrecimiento . La línea base chilena () destruye masivamente el rendimiento productivo óptimo antes de que el capital fluya hacia la economía real.  
+2. **Exacción Inmobiliaria ():** La desviación especulativa del suelo se modela como . Este sobreprecio drena liquidez del sector productivo hacia la acumulación pasiva de capital rentista.  
+3. **Indexación Asimétrica Energética ():** El impuesto específico opera como una cuña fiscal profundamente regresiva que encarece de manera transversal toda la matriz logística nacional.  
+4. **Commoditización (Brent ):** Proceso estocástico del valor del crudo acoplado directamente al consumo interno, exponiendo la falta de complejidad económica local.
 
 ## **2\. Arquitectura de Datos (CI/CD Pipeline)**
 
