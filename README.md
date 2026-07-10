@@ -15,14 +15,11 @@ $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} -
 ---
 
 ## Índice de Navegación Detallado
-* [1. Executive Summary](#1-executive-summary)
-* [2. Ecuación Fundamental de Bienestar](#2-ecuación-fundamental-de-bienestar)
-* [Ecuación Fundamental de Bienestar](#ecuación-fundamental-de-bienestar)
-* [1\. Marco Teórico y Formulación Estocástica](#1-marco-teórico-y-formulación-estocástica)
+* [Índice de Navegación](#índice-de-navegación)
+* [1. Marco Teórico y Formulación Estocástica](#1-marco-teórico-y-formulación-estocástica)
   * [ºLos Cuatro Pilares del Estancamiento](#ºlos-cuatro-pilares-del-estancamiento)
-* [2\. Arquitectura de Datos (CI/CD Pipeline)](#2-arquitectura-de-datos-(ci/cd-pipeline))
-* [3\. Reproducibilidad Local](#3-reproducibilidad-local)
-  * [Archivo Histórico Recuperado](#archivo-histórico-recuperado)
+* [2. Arquitectura de Datos (CI/CD Pipeline)](#2-arquitectura-de-datos-ci/cd-pipeline)
+* [3. Reproducibilidad Local](#3-reproducibilidad-local)
 * [📄 Abstract](#📄-abstract)
 * [Clasificación JEL](#clasificación-jel)
 * [Resumen / Abstract](#resumen-/-abstract)
@@ -33,7 +30,7 @@ $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} -
   * [Pilar III — Hipertrofia Burocrática](#pilar-iii-—-hipertrofia-burocrática)
   * [Pilar IV — Commoditización](#pilar-iv-—-commoditización)
 * [Estructura del Repositorio](#estructura-del-repositorio)
-  * [Variables del dataset (`data/simulacion_base.csv`)](#variables-del-dataset-(`data/simulacion_basecsv`))
+  * [Variables del dataset (`data/simulacion_base.csv`)](#variables-del-dataset-`data/simulacion_basecsv`)
 * [Arquitectura CI/CD: Pipeline de Datos Automatizado](#arquitectura-ci/cd:-pipeline-de-datos-automatizado)
   * [Diagrama de flujo del pipeline](#diagrama-de-flujo-del-pipeline)
   * [Mecanismos de activación](#mecanismos-de-activación)
@@ -41,76 +38,16 @@ $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} -
   * [Reproducibilidad determinística](#reproducibilidad-determinística)
 * [Resultados Base](#resultados-base)
 * [Implicancias de Política Pública](#implicancias-de-política-pública)
-* [Motor de Simulación (`src/simulador.py`)](#motor-de-simulación-(`src/simuladorpy`))
+* [Motor de Simulación (`src/simulador.py`)](#motor-de-simulación-`src/simuladorpy`)
   * [Instalación](#instalación)
   * [Uso](#uso)
   * [Parámetros principales](#parámetros-principales)
-  * [Ejecución visual (interfaz web)](#ejecución-visual-(interfaz-web))
+  * [Ejecución visual (interfaz web)](#ejecución-visual-interfaz-web)
 * [Próximos Pasos](#próximos-pasos)
 * [⚙️ Reproducibilidad Computacional](#⚙️-reproducibilidad-computacional)
-* [🛠️ Infraestructura de Automatización (Live Engine)](#🛠️-infraestructura-de-automatización-(live-engine))
+* [🛠️ Infraestructura de Automatización (Live Engine)](#🛠️-infraestructura-de-automatización-live-engine)
 
 ---
-
-[![Executable Paper](https://img.shields.io/badge/Paper-Executable-blue.svg)](https://blackmetalhans.github.io/nudo-gordiano-economia-cl/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-> **Ejecutable Paper:** Modelado estocástico de ineficiencias estructurales y pérdida de bienestar agregado.
-
-## 1. Executive Summary
-Este repositorio cuantifica matemáticamente la histéresis del desarrollo en Chile, modelando el colapso de la Productividad Total de Factores (PTF) desde la perspectiva del ingreso neto ciudadano ($I_{neto}$). El modelo abandona el análisis discursivo tradicional para plantear un sistema de ecuaciones estocásticas calibrables y auditables en tiempo real.
-
-## 2. Ecuación Fundamental de Bienestar
-
-$$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} - \underbrace{\delta_E(\beta+\tau)}_{\text{Fricción Energética}} - \underbrace{\delta_C\mu_{m^2}^{eff}}_{\text{Exacción Inmob.}} - \underbrace{\phi B_t}_{\text{Shock Externo}} + \eta_t$$
-
----
-
-
-* [**Ecuación Fundamental de Bienestar**](#**ecuación-fundamental-de-bienestar**)
-* [**Índice de Navegación**](#**índice-de-navegación**)
-* [**1\. Marco Teórico y Formulación Estocástica**](#**1-marco-teórico-y-formulación-estocástica**)
-  * [**ºLos Cuatro Pilares del Estancamiento**](#**ºlos-cuatro-pilares-del-estancamiento**)
-* [**2\. Arquitectura de Datos (CI/CD Pipeline)**](#**2-arquitectura-de-datos-(ci/cd-pipeline)**)
-* [**3\. Reproducibilidad Local**](#**3-reproducibilidad-local**)
-  * [Archivo Histórico Recuperado](#archivo-histórico-recuperado)
-* [📄 Abstract](#📄-abstract)
-* [Clasificación JEL](#clasificación-jel)
-* [Resumen / Abstract](#resumen-/-abstract)
-* [Pregunta de Investigación](#pregunta-de-investigación)
-* [Metodología y Formalización Matemática](#metodología-y-formalización-matemática)
-  * [Pilar I — Fraude del Hormigón](#pilar-i-—-fraude-del-hormigón)
-  * [Pilar II — Exacción Energética](#pilar-ii-—-exacción-energética)
-  * [Pilar III — Hipertrofia Burocrática](#pilar-iii-—-hipertrofia-burocrática)
-  * [Pilar IV — Commoditización](#pilar-iv-—-commoditización)
-* [Estructura del Repositorio](#estructura-del-repositorio)
-  * [Variables del dataset (`data/simulacion_base.csv`)](#variables-del-dataset-(`data/simulacion_basecsv`))
-* [Arquitectura CI/CD: Pipeline de Datos Automatizado](#arquitectura-ci/cd:-pipeline-de-datos-automatizado)
-  * [Diagrama de flujo del pipeline](#diagrama-de-flujo-del-pipeline)
-  * [Mecanismos de activación](#mecanismos-de-activación)
-  * [Parametrización dinámica via `workflow_dispatch`](#parametrización-dinámica-via-`workflow_dispatch`)
-  * [Reproducibilidad determinística](#reproducibilidad-determinística)
-* [Resultados Base](#resultados-base)
-* [Implicancias de Política Pública](#implicancias-de-política-pública)
-* [Motor de Simulación (`src/simulador.py`)](#motor-de-simulación-(`src/simuladorpy`))
-  * [Instalación](#instalación)
-  * [Uso](#uso)
-  * [Parámetros principales](#parámetros-principales)
-  * [Ejecución visual (interfaz web)](#ejecución-visual-(interfaz-web))
-* [Próximos Pasos](#próximos-pasos)
-* [⚙️ Reproducibilidad Computacional](#⚙️-reproducibilidad-computacional)
-* [🛠️ Infraestructura de Automatización (Live Engine)](#🛠️-infraestructura-de-automatización-(live-engine))
-
----
-
-[![Executable Paper](https://img.shields.io/badge/Paper-Executable-blue.svg)](https://blackmetalhans.github.io/nudo-gordiano-economia-cl/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-**Modelado Estocástico de Ineficiencias Estructurales y Pérdida de Bienestar Agregado**
-
-Este repositorio constituye un **Executable Paper**. Cuantifica la histéresis del desarrollo en Chile mediante un sistema de ecuaciones estocásticas calibrables.
-
-## **Ecuación Fundamental de Bienestar**
 
 $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} - \underbrace{\delta_E(\beta+\tau)}_{\text{Fricción Energética}} - \underbrace{\delta_C\mu_{m^2}^{eff}}_{\text{Exacción Inmob.}} - \underbrace{\phi B_t}_{\text{Shock Externo}} + \eta_t$$
 
