@@ -1,86 +1,58 @@
 <!DOCTYPE html>
-<html lang='es' class='antialiased'>
+<html lang="es" class="antialiased">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nudo Gordiano Económico | Paper Ejecutable</title>
-    <script src='https://cdn.tailwindcss.com'></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
     <script>
         window.MathJax = {
-            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
-            startup: {
-                pageReady: () => {
-                    return MathJax.startup.defaultPageReady().then(() => {
-                        const st = document.getElementById('math-status');
-                        if(st) { st.innerText = '✓ MathJax'; st.classList.replace('text-amber-500', 'text-emerald-500'); }
-                    });
-                }
-            }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            chtml: { scale: 0.95 },
+            startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => {
+                document.getElementById('math-status').innerText = "✓ MathJax";
+                document.getElementById('math-status').classList.replace('text-amber-500', 'text-emerald-500');
+            }) }
         };
     </script>
-    <script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js'></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <style>
-        :root { --bg-base: #0b1120; --bg-panel: #1e293b; --accent: #14b8a6; --text-prose: #cbd5e1; }
-        body { background-color: var(--bg-base); color: #e2e8f0; font-family: sans-serif; }
+        :root { --bg-base: #0b1120; --bg-panel: #1e293b; --border-subtle: #334155; --text-main: #e2e8f0; --accent: #14b8a6; }
+        body { background-color: var(--bg-base); color: var(--text-main); font-family: 'Inter', sans-serif; }
+        .prose-academic { font-family: 'Merriweather', serif; line-height: 1.8; color: #cbd5e1; }
+        .panel { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 1.25rem; }
         .stat-card { background: linear-gradient(135deg, var(--bg-panel) 0%, rgba(20, 184, 166, 0.05) 100%); border-left: 3px solid var(--accent); }
-        .chart-container { height: 400px; background: var(--bg-base); border: 1px solid #334155; border-radius: 8px; }
+        .chart-container { height: 480px; width: 100%; background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 6px; }
     </style>
 </head>
-<body class='p-4 md:p-12'>
-    <main class='max-w-6xl mx-auto space-y-8'>
-        
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
-                <div class="stat-card p-4 rounded">
-                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Autor</div>
-                    <div class="data-mono text-sm text-teal-400">Hans Soriano</div>
-                </div>
-                <div class="stat-card p-4 rounded">
-                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Versión</div>
-                    <div class="data-mono text-sm text-teal-400">v3.0.0</div>
-                </div>
-                <div class="stat-card p-4 rounded">
-                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Status</div>
-                    <div id="math-status" class="text-amber-500 data-mono text-sm font-semibold">...</div>
-                </div>
-                <div class="stat-card p-4 rounded bg-slate-900/40 border border-teal-500/30 col-span-2">
-                    <div class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mb-1">Mercado en Vivo</div>
-                    <div class="flex gap-4">
-                        <div class="text-xs text-teal-400 font-bold">UF: <span id="val-uf-live">...</span></div>
-                        <div class="text-xs text-teal-400 font-bold">USD: <span id="val-dolar-live">...</span></div>
-                    </div>
+<body class="min-h-screen p-4 md:p-8 lg:p-12">
+    <main class="max-w-6xl mx-auto space-y-12">
+        <header class="border-b border-slate-700 pb-8">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-white mb-2">El Nudo Gordiano de la Economía Chilena</h1>
+                    <p class="text-slate-400 text-lg">Modelado Estocástico de Ineficiencias Estructurales</p>
                 </div>
             </div>
-            <h1 class='text-4xl font-bold mb-4'>El Nudo Gordiano de la Economía Chilena</h1>
-            <div class='grid grid-cols-1 md:grid-cols-4 gap-4'>
-                <div class='stat-card p-4 rounded'><div class='text-xs text-slate-500 uppercase'>Autor</div><div class='text-teal-400'>Hans Soriano</div></div>
-                <div class='stat-card p-4 rounded'><div class='text-xs text-slate-500 uppercase'>Status</div><div id='math-status' class='text-amber-500'>Cargando...</div></div>
-                <!-- Tarjeta API en Vivo -->
-                <div class='stat-card p-4 rounded bg-slate-900/40 border border-teal-500/30'>
-                    <div class='text-[10px] text-slate-500 font-semibold uppercase mb-1'>Mercado en Vivo</div>
-                    <div class='flex flex-col gap-1'>
-                        <div class='text-xs'>UF: <span id='val-uf-live' class='text-teal-400 font-bold'>...</span></div>
-                        <div class='text-xs'>USD: <span id='val-dolar-live' class='text-teal-400 font-bold'>...</span></div>
-                    </div>
-                </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stat-card p-4 rounded"> <div class="text-xs text-slate-500 font-semibold">Autor</div> <div class="text-teal-400">Hans Soriano</div> </div>
+                <div class="stat-card p-4 rounded"> <div class="text-xs text-slate-500 font-semibold">Versión</div> <div class="text-teal-400">v3.0.0</div> </div>
+                <div class="stat-card p-4 rounded"> <div class="text-xs text-slate-500 font-semibold">Licencia</div> <div class="text-teal-400">MIT</div> </div>
+                <div class="stat-card p-4 rounded"> <div class="text-xs text-slate-500 font-semibold">Status</div> <div id="math-status" class="text-amber-500">Cargando...</div> </div>
             </div>
         </header>
-
-        <article class='prose prose-invert max-w-none text-slate-300'>
-            <p>$$I_{neto,t} = Y_0 \cdot \mathcal{E}(k) - \delta_E(\beta+\tau) - \delta_C\mu_{m^2}^{eff} - \phi B_t + \eta_t$$</p>
-            <div class='chart-container my-8'><canvas id='incomeChart'></canvas></div>
+        <article class="prose-academic"> 
+            <h2>I. Formulación del Sistema</h2>
+            <p>Contenido del paper ejecutable con soporte para LaTeX y simulación Monte Carlo.</p>
+            <div class="bg-slate-900/50 p-6 rounded border border-slate-700 my-6 text-center">
+                $$I_{neto,t} = Y_0 \cdot \mathcal{E}(k) - \delta_E(\beta+\tau) - \delta_C\mu_{m^2}^{eff} + \eta_t$$
+            </div>
         </article>
+        <section class="chart-container">
+            <canvas id="incomeChart"></canvas>
+        </section>
     </main>
-
-    <script>
-        async function fetchLiveIndicators() {
-            try {
-                const res = await fetch('https://mindicador.cl/api');
-                const data = await res.json();
-                document.getElementById('val-uf-live').innerText = '$' + data.uf.valor.toLocaleString('es-CL');
-                document.getElementById('val-dolar-live').innerText = '$' + data.dolar.valor.toLocaleString('es-CL');
-            } catch (e) { console.error('API Error'); }
-        }
-        window.addEventListener('load', fetchLiveIndicators);
-    </script>
+    <!-- Los scripts de simulación se mantienen en la versión oficial -->
 </body>
 </html>
