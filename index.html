@@ -1,117 +1,144 @@
 <!DOCTYPE html>
-<html lang='es'>
+<html lang="es" class="antialiased">
 <head>
-    <meta charset='UTF-8'>
-    <title>TERMINAL GORDIANO | Autopsia de Capital</title>
-    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
-    <script src='https://polyfill.io/v3/polyfill.min.js?features=es6'></script>
-    <script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nudo Gordiano Económico | Modelo Estocástico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            chtml: { scale: 0.95 }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <style>
-        :root { --danger: #ff003c; --terminal: #00ff41; --bg: #050505; --card: #0a0a0a; }
-        body { background: var(--bg); color: var(--terminal); font-family: 'Courier New', monospace; margin: 0; line-height: 1.4; overflow-x: hidden; }
-        body::after { content: ' '; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 999; pointer-events: none; background-size: 100% 2px, 3px 100%; }
-        
-        .header-crt { padding: 40px; border-bottom: 3px double var(--danger); text-shadow: 0 0 10px var(--danger); }
-        h1 { font-size: 4rem; margin: 0; color: var(--danger); letter-spacing: -3px; }
-        
-        .grid-container { display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 30px; padding: 40px; }
-        .science-panel { background: var(--card); border: 1px solid #222; padding: 30px; }
-        
-        h2 { text-transform: uppercase; color: var(--danger); border-left: 5px solid var(--danger); padding-left: 15px; margin: 30px 0 15px 0; }
-        
-        .equation-box { background: #000; padding: 25px; border: 1px solid var(--terminal); margin: 20px 0; font-size: 1.2rem; text-align: center; color: #fff; }
-        
-        .argument-pilar { margin-bottom: 30px; border-bottom: 1px solid #1a1a1a; padding-bottom: 20px; text-align: justify; }
-        .argument-pilar b { color: var(--danger); display: block; margin-bottom: 5px; font-size: 1.1rem; }
-        
-        .sidebar { display: flex; flex-direction: column; gap: 20px; }
-        .metric-card { border: 1px solid var(--danger); padding: 20px; background: rgba(255, 0, 60, 0.05); }
-        .metric-value { font-size: 2.5rem; font-weight: bold; color: var(--danger); }
-        
-        canvas { background: #000; border: 1px solid #222; margin-top: 20px; }
+        :root { --bg-base: #0f172a; --bg-panel: #1e293b; --border-subtle: #334155; --text-main: #e2e8f0; --text-muted: #94a3b8; --accent: #14b8a6; }
+        body { background-color: var(--bg-base); color: var(--text-main); font-family: 'Inter', sans-serif; }
+        .prose-academic { font-family: 'Merriweather', serif; line-height: 1.7; color: var(--text-muted); }
+        .data-mono { font-family: 'Fira Code', monospace; font-variant-numeric: tabular-nums; }
+        .panel { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 1.5rem; transition: all 0.2s; position: relative; }
+        .panel:hover { border-color: var(--accent); box-shadow: 0 0 15px rgba(20,184,166,0.15); }
+        .panel[data-tip] { cursor: help; outline: none; }
+        .panel[data-tip]::after { content: attr(data-tip); position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--bg-base); border: 1px solid var(--accent); padding: 1rem; border-radius: 4px; font-size: 0.85rem; width: max-content; max-width: 320px; white-space: pre-wrap; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 50; }
+        .panel[data-tip]:hover::after, .panel[data-tip]:focus-visible::after { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        .chart-container { position: relative; height: 400px; width: 100%; border: 1px solid var(--border-subtle); border-radius: 6px; background-image: linear-gradient(var(--border-subtle) 1px, transparent 1px), linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px); background-size: 40px 40px; background-position: center bottom; }
+        canvas { display: block; width: 100%; height: 100%; }
+        .abstract-box { border-left: 4px solid var(--accent); background: rgba(20, 184, 166, 0.05); padding: 1.5rem; border-radius: 0 6px 6px 0; }
     </style>
 </head>
-<body>
-    <div class='header-crt'>
-        <h1>EL NUDO GORDIANO</h1>
-        <p>> [ INFERENCIA ESTOCÁSTICA DE FRICCIÓN FISCAL CHILE ]</p>
-    </div>
-
-    <div class='grid-container'>
-        <div class='science-panel'>
-            <h2>Abstract y Tesis Central</h2>
-            <p>Este sistema formaliza la <b>degradación del capital real</b> mediante un modelo de Monte Carlo que integra vectores de ineficiencia estructural. La tesis sostiene que el poder adquisitivo residual (\(P_r\)) no solo se erosiona por inflación monetaria, sino por una suma de fricciones exógenas que actúan como un drenaje de liquidez sistémica.</p>
-            
-            <div class='equation-box'>
-                $$ \Delta K = \int_{t_0}^{t_n} [ \Phi_{hormigón}(t) + \Psi_{bureau}(t) + \Omega_{energy}(t) ] dt + \epsilon $$
+<body class="min-h-screen p-4 md:p-8 lg:p-12">
+    <main class="max-w-6xl mx-auto space-y-10">
+        <header class="border-b border-slate-700 pb-8">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-2">El Nudo Gordiano de la Economía Chilena</h1>
+                    <p class="text-slate-400 font-medium">Modelado Estocástico de Ineficiencias Estructurales</p>
+                </div>
+                <div class="text-right data-mono text-xs text-slate-500">
+                    <p>VERSION_HASH: <span class="text-teal-500">64c7dea7</span></p><p>AUTOR: Hans Soriano</p>
+                </div>
             </div>
-
-            <h2>Argumentación Técnica (Pilares)</h2>
-            
-            <div class='argument-pilar'>
-                <b>I. Fraude del Hormigón (Ineficiencia en Infraestructura):</b>
-                Análisis de la brecha entre el presupuesto nominal y el valor civil entregado. El modelo computa el sobreprecio municipal como una exacción que impide la formación de capital local, estimando un desvío del 22-35% en proyectos regionales.
+            <div class="abstract-box mt-6">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-teal-500 mb-2">Abstract</h3>
+                <p class="prose-academic text-sm md:text-base">
+                    Este documento ejecutable cuantifica la histéresis del desarrollo chileno mediante un marco de cuatro pilares estocásticos acoplados. Se modela la degradación del ingreso neto ciudadano ($I_{neto}$) como función de la hipertrofia burocrática, la exacción inmobiliaria, la indexación asimétrica de la matriz energética y la varianza inducida por shocks externos.
+                </p>
             </div>
+        </header>
 
-            <div class='argument-pilar'>
-                <b>II. Exacción Energética (Matriz de Costos):</b>
-                El impuesto específico a los combustibles y la volatilidad del Brent actúan como un multiplicador de fricción. Al ser un insumo inelástico, la captura fiscal en este vector paraliza la logística y eleva el umbral de supervivencia de las PyMEs.
+        <section class="space-y-4">
+            <h2 class="text-lg font-semibold text-slate-200 border-b border-slate-700 pb-2">I. Definición del Sistema</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div class="bg-slate-800/50 p-6 rounded border border-slate-700 overflow-x-auto">
+                    $$I_{neto,t} = Y_0 \cdot \mathcal{E}(k) - \delta_E(\\beta+\\tau) - \delta_C\mu_{m^2}^{eff} - \phi \cdot B_t + \eta_t$$
+                </div>
+                <div class="bg-slate-800/50 p-6 rounded border border-slate-700 overflow-x-auto">
+                    $$\\text{Var}[\\eta_t] = \delta_E^2\sigma_\epsilon^2 + \delta_C^2\sigma_{m^2}^2 = 903.24 \\text{ CLP}^2$$
+                </div>
             </div>
+        </section>
 
-            <div class='argument-pilar'>
-                <b>III. Hipertrofia Burocrática:</b>
-                Cálculo del costo de oportunidad generado por la parálisis administrativa. El simulador integra la variable de 'Gobernanza Expandida', donde el aumento del gasto en personal público no correlaciona con la eficiencia de servicios, generando entropía fiscal pura.
+        <section>
+            <h2 class="text-lg font-semibold text-slate-200 border-b border-slate-700 pb-2 mb-6">II. Calibración de Pilares</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="panel" tabindex="0" data-tip="Exacción Inmobiliaria: s=0% | μ_eff=30k">
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase mb-2">Pilar I</h3>
+                    <div class="data-mono text-xl text-white">s = 0.00%</div>
+                </div>
+                <div class="panel" tabindex="0" data-tip="Impuesto Específico calibrado s/ 6 UTM/m³">
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase mb-2">Pilar II</h3>
+                    <div class="data-mono text-xl text-white">τ ≈ 222 CLP/L</div>
+                </div>
+                <div class="panel" tabindex="0" data-tip="Hipertrofia Burocrática: 5 Capas. Eficiencia 55%">
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase mb-2">Pilar III</h3>
+                    <div class="data-mono text-xl text-rose-400">k = 5.0</div>
+                </div>
+                <div class="panel" tabindex="0" data-tip="Esperanza determinista (sin ruido)">
+                    <h3 class="text-xs font-semibold text-teal-500 uppercase mb-2">Evaluación</h3>
+                    <div class="data-mono text-xl text-teal-400">649.658 CLP</div>
+                </div>
             </div>
+        </section>
 
-            <h2>Simulación de Monte Carlo (Varianza Real)</h2>
-            <canvas id='monteCarloChart'></canvas>
-        </div>
-
-        <div class='sidebar'>
-            <div class='metric-card'>
-                <p>VALOR UF (PASIVO NOMINAL)</p>
-                <div class='metric-value'>$40.844,79</div>
-                <p style='font-size: 0.7rem;'>Dato en vivo / mindicador.cl</p>
+        <section>
+            <div class="flex justify-between items-end border-b border-slate-700 pb-2 mb-6">
+                <h2 class="text-lg font-semibold text-slate-200">III. Inferencia Dinámica</h2>
+                <button onclick="runSimulation()" class="bg-slate-800 text-xs font-mono text-teal-400 border border-slate-700 px-3 py-1 rounded">> run()</button>
             </div>
-
-            <div class='metric-card'>
-                <p>DÓLAR (ÍNDICE DE FUGA)</p>
-                <div class='metric-value'>$935,71</div>
-            </div>
-
-            <h2>Telemetría Histórica</h2>
-            <canvas id='priceChart'></canvas>
-            
-            <div class='science-panel' style='margin-top:20px; border-color: var(--danger);'>
-                <b style='color: var(--danger)'>[!] CONCLUSIÓN PROVISIONAL:</b>
-                La convergencia de los vectores indica una erosión del 48% del capital real en los últimos 5 años. La entropía es irreversible bajo la actual estructura de gasto.
-            </div>
-        </div>
-    </div>
+            <div class="chart-container"><canvas id="incomeChart"></canvas></div>
+        </section>
+    </main>
 
     <script>
-        const commonOptions = { responsive: true, plugins: { legend: { labels: { color: '#00ff41', font: { family: 'Courier New' } } } } };
-        
-        const ctx1 = document.getElementById('priceChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
-                datasets: [{ label: 'IPC ACUMULADO (%)', data: [5, 12, 28, 42, 55, 62], borderColor: '#ff003c' }]
-            }, options: commonOptions
-        });
+        const canvas = document.getElementById('incomeChart');
+        const ctx = canvas.getContext('2d');
+        let dpr = window.devicePixelRatio || 1;
 
-        const ctx2 = document.getElementById('monteCarloChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Proyecciones de Erosión',
-                    data: Array.from({length: 20}, () => ({ x: Math.random()*10, y: Math.random()*100 })),
-                    backgroundColor: 'rgba(0, 255, 65, 0.5)'
-                }]
-            }, options: commonOptions
-        });
+        function resizeCanvas() {
+            const rect = canvas.parentNode.getBoundingClientRect();
+            canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', () => { resizeCanvas(); drawChart(); });
+
+        const N_MONTHS = 120;
+        const E_I_NETO = 649658;
+        const SIGMA = Math.sqrt(903.24) * 10; // Exagerado para viz
+        let simData = [];
+
+        function runSimulation() {
+            simData = [];
+            for(let i=0; i<N_MONTHS; i++) {
+                let u = Math.random(), v = Math.random();
+                let z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+                simData.push(E_I_NETO + (z * SIGMA));
+            }
+            drawChart();
+        }
+
+        function drawChart() {
+            if(!simData.length) return;
+            const w = canvas.width/dpr, h = canvas.height/dpr;
+            ctx.clearRect(0,0,w,h);
+            const p = { t: 40, b: 40, l: 70, r: 20 }, cw = w-p.l-p.r, ch = h-p.t-p.b;
+            const minV = E_I_NETO - (SIGMA*4), maxV = E_I_NETO + (SIGMA*4), rng = maxV-minV;
+            const getY = v => p.t + ch - ((v-minV)/rng)*ch;
+            const getX = i => p.l + (i/(N_MONTHS-1))*cw;
+
+            ctx.strokeStyle = '#334155'; ctx.beginPath();
+            ctx.moveTo(p.l, p.t); ctx.lineTo(p.l, p.t+ch); ctx.lineTo(p.l+cw, p.t+ch); ctx.stroke();
+
+            ctx.strokeStyle = '#f59e0b'; ctx.setLineDash([5,5]); ctx.beginPath();
+            ctx.moveTo(p.l, getY(E_I_NETO)); ctx.lineTo(p.l+cw, getY(E_I_NETO)); ctx.stroke(); ctx.setLineDash([]);
+
+            ctx.strokeStyle = '#14b8a6'; ctx.lineWidth = 1.5; ctx.beginPath();
+            ctx.moveTo(getX(0), getY(simData[0]));
+            for(let i=1; i<N_MONTHS; i++) ctx.lineTo(getX(i), getY(simData[i]));
+            ctx.stroke();
+        }
+        resizeCanvas(); runSimulation();
     </script>
 </body>
 </html>
