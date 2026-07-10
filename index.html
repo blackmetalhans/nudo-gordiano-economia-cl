@@ -11,60 +11,61 @@
         body {
             background: var(--bg); color: var(--terminal); font-family: 'Courier New', monospace; margin: 0; overflow-x: hidden;
         }
-        /* Efecto CRT Scanline */
         body::before {
             content: ' '; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
             z-index: 9999; pointer-events: none; background-size: 100% 2px, 3px 100%;
         }
-        .header-glitch {
-            padding: 60px 20px; border-bottom: 2px solid var(--danger); background: #000; text-align: center;
-        }
-        h1 {
-            font-size: 6rem; margin: 0; color: var(--danger); text-transform: uppercase; 
-            letter-spacing: -8px; font-weight: 900; filter: drop-shadow(0 0 15px var(--danger));
-        }
-        .system-status { background: var(--danger); color: #000; padding: 5px; font-weight: bold; text-align: center; }
-        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: #222; border: 2px solid #222; }
-        .cell { background: var(--bg); padding: 40px; border: 1px solid #111; }
-        .metric-hero { font-size: 5rem; color: var(--danger); margin: 10px 0; }
-        .label { color: #666; font-size: 0.8rem; text-transform: uppercase; }
-        canvas { background: #000; border: 1px solid #222; margin-top: 20px; }
-        .scientific-overlay { font-size: 0.9rem; color: #888; border-left: 2px solid var(--terminal); padding-left: 20px; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        .live-tag { color: var(--danger); animation: pulse 1.5s infinite; }
+        .header-glitch { padding: 40px 20px; border-bottom: 2px solid var(--danger); background: #000; text-align: center; }
+        h1 { font-size: 4rem; margin: 0; color: var(--danger); text-transform: uppercase; letter-spacing: -4px; }
+        .system-status { background: var(--danger); color: #000; padding: 5px; font-weight: bold; text-align: center; font-size: 0.7rem; }
+        .grid-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2px; background: #222; }
+        .cell { background: var(--bg); padding: 30px; border: 1px solid #111; }
+        .metric-hero { font-size: 3.5rem; color: var(--danger); margin: 10px 0; }
+        .label { color: var(--danger); font-size: 0.8rem; text-transform: uppercase; font-weight: bold; }
+        .scientific-text { color: #aaa; font-size: 0.9rem; line-height: 1.4; text-align: justify; }
+        canvas { background: #000; border: 1px solid #222; margin-top: 15px; }
+        .pilar-box { border-left: 2px solid var(--terminal); padding-left: 15px; margin: 20px 0; }
     </style>
 </head>
 <body>
-    <div class='system-status'>CRITICAL SYSTEM FAILURE // FISCAL ENTROPY DETECTED // PROJECT: GORDIAN_KNOT</div>
+    <div class='system-status'>[ LIVE SESSION ACTIVE ] // GORDIAN KNOT ALGORITHM // TRACING FISCAL CORROSION</div>
     <header class='header-glitch'>
         <h1>EL NUDO GORDIANO</h1>
-        <p style='letter-spacing: 5px;'>INFERENCIA ESTOCÁSTICA DE LA EROSIÓN DEL CAPITAL</p>
+        <p style='color: #888; font-size: 0.8rem;'>AUTOPSIA EN TIEMPO REAL DEL PODER ADQUISITIVO CHILENO</p>
     </header>
 
     <div class='grid-layout'>
         <div class='cell'>
-            <span class='label'>[ VECTOR_A: EVOLUCIÓN DE PRECIOS E IPC ]</span>
-            <p class='scientific-overlay'>Visualización de la exacción inflacionaria y la degradación del valor nominal. La curva ascendente representa la transferencia de riqueza hacia el aparato fiscal.</p>
-            <canvas id='priceChart'></canvas>
+            <span class='label'>[ DATA_LOG: EVOLUCIÓN DE PRECIOS E IPC ACUMULADO ]</span>
+            <canvas id='priceChart' style='max-height: 300px;'></canvas>
+            <div class='scientific-text' style='margin-top:20px;'>
+                <h3 style='color:var(--terminal)'>Abstract Científico</h3>
+                Este modelo formaliza la pérdida de valor mediante una <b>Inferencia Estocástica</b> de la fricción fiscal. No se limita a graficar; computa la entropía generada por la ineficiencia estructural aplicada a la economía chilena (2019-2024).
+            </div>
         </div>
+
         <div class='cell'>
-            <span class='label'>[ VECTOR_B: PODER ADQUISITIVO REAL ]</span>
-            <div class='metric-hero' id='uf-val'>$40.844</div>
-            <span class='label'>UF ACTUAL (PESO DEL PASIVO)</span>
-            <hr style='border: 1px solid #111; margin: 40px 0;'>
+            <span class='label'>[ INDICADORES DE PRESIÓN VIVA ]</span>
+            <div class='metric-hero'>$40.844</div>
+            <span class='label'>UF (VECTOR DE PASIVO REAL)</span>
             <div class='metric-hero' style='color:var(--terminal)'>$935.71</div>
             <span class='label'>DÓLAR (FUGA DE SEGURIDAD)</span>
+            <p class='scientific-text' style='font-size: 0.7rem; margin-top:20px;'>SOURCE: MINDICADOR.CL API</p>
         </div>
+
         <div class='cell' style='grid-column: span 2;'>
-            <span class='label'>[ ANÁLISIS DE MONTE CARLO: DERROCHE FISCAL ]</span>
-            <p class='scientific-overlay'>Inyectando 10,000 iteraciones sobre el 'Fraude del Hormigón' y la 'Hipertrofia Burocrática'. Cada punto en este gráfico es una pérdida de infraestructura civil no recuperable.</p>
-            <canvas id='monteCarloChart' style='height: 300px;'></canvas>
+            <span class='label'>[ ANÁLISIS DE MONTE CARLO: PILARES DE FRICCIÓN ]</span>
+            <div class='pilar-box'>
+                <b style='color:var(--terminal)'>1. Fraude del Hormigón:</b> Sobreprecio estructural en infraestructura pública municipal.<br>
+                <b style='color:var(--terminal)'>2. Exacción Energética:</b> Impacto del Brent e Impuesto Específico en la cadena de valor.<br>
+                <b style='color:var(--terminal)'>3. Hipertrofia Burocrática:</b> Ineficiencia administrativa y costo de oportunidad estatal.
+            </div>
+            <canvas id='monteCarloChart' style='height: 200px;'></canvas>
         </div>
     </div>
 
     <script>
-        // --- DATA SIMULATION ---
         const ctxPrice = document.getElementById('priceChart').getContext('2d');
         new Chart(ctxPrice, {
             type: 'line',
@@ -73,41 +74,20 @@
                 datasets: [{
                     label: 'IPC ACUMULADO (%)',
                     data: [2, 5, 12, 25, 38, 45],
-                    borderColor: '#ff003c',
-                    backgroundColor: 'rgba(255, 0, 60, 0.1)',
-                    fill: true,
-                    borderWidth: 3,
-                    pointRadius: 0
+                    borderColor: '#ff003c', backgroundColor: 'rgba(255, 0, 60, 0.1)', fill: true, borderWidth: 3
                 }, {
                     label: 'PODER ADQUISITIVO REAL',
-                    data: [100, 95, 85, 70, 60, 52],
-                    borderColor: '#00ff41',
-                    borderDash: [5, 5],
-                    borderWidth: 2
+                    data: [100, 95, 85, 70, 60, 52], borderColor: '#00ff41', borderDash: [5, 5], borderWidth: 2
                 }]
             },
-            options: {
-                responsive: true,
-                scales: { y: { grid: { color: '#111' } }, x: { grid: { color: '#111' } } },
-                plugins: { legend: { labels: { color: '#00ff41', font: { family: 'Courier New' } } } }
-            }
+            options: { responsive: true, plugins: { legend: { labels: { color: '#00ff41', font: { family: 'Courier New' } } } } }
         });
 
-        // Mock de Monte Carlo interactivo
         const ctxMC = document.getElementById('monteCarloChart').getContext('2d');
         new Chart(ctxMC, {
             type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'SIMULACIÓN ENTROPÍA',
-                    data: Array.from({length: 100}, () => ({x: Math.random() * 100, y: Math.random() * 100})),
-                    backgroundColor: '#ff003c'
-                }]
-            },
-            options: {
-                scales: { x: { display: false }, y: { display: false } },
-                plugins: { legend: { display: false } }
-            }
+            data: { datasets: [{ label: 'SCATTER ENTROPÍA', data: Array.from({length: 150}, () => ({x: Math.random()*100, y: Math.random()*100})), backgroundColor: '#ff003c' }] },
+            options: { scales: { x: { display: false }, y: { display: false } }, plugins: { legend: { display: false } } }
         });
     </script>
 </body>
