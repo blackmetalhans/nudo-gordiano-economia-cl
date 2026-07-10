@@ -1,5 +1,8 @@
 # **El Nudo Gordiano de la Economía Chilena**
 
+[![Executable Paper](https://img.shields.io/badge/Paper-Executable-blue.svg)](https://blackmetalhans.github.io/nudo-gordiano-economia-cl/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 **Modelado Estocástico de Ineficiencias Estructurales y Pérdida de Bienestar Agregado**
 
 *Autor: Hans Soriano | Estado: Producción (v3.0.0-integral)*
@@ -18,10 +21,10 @@ $$\text{Var}[\eta_t] = \delta_E^2\sigma_\varepsilon^2 + \delta_C^2\sigma_{m^2}^2
 
 ## **2. Los Cuatro Pilares del Estancamiento**
 
-1. **Hipertrofia Burocrática ($\delta_B$):** El costo de agencia estatal se modela como una función de decrecimiento. La línea base chilena destruye masivamente el rendimiento productivo.
-2. **Exacción Inmobiliaria ($\mu_{m^2}$):** La desviación especulativa del suelo. Este sobreprecio drena liquidez del sector productivo hacia la acumulación pasiva.
-3. **Indexación Asimétrica Energética ($\delta_E$):** El impuesto específico opera como una cuña fiscal regresiva que encarece la matriz logística.
-4. **Commoditización (Brent $\phi$):** Proceso estocástico del valor del crudo acoplado directamente al consumo interno.
+1. **Hipertrofia Burocrática ($\delta_B$):** El costo de agencia estatal se modela como una función de decrecimiento institucional.
+2. **Exacción Inmobiliaria ($\mu_{m^2}$):** La desviación especulativa del suelo que drena liquidez hacia la acumulación pasiva.
+3. **Indexación Asimétrica Energética ($\delta_E$):** Cuña fiscal regresiva que encarece transversalmente la matriz logística nacional.
+4. **Commoditización (Brent $\phi$):** Exposición stocástica del valor del crudo acoplada directamente al consumo interno.
 
---- 
-*Nota: Este documento ha sido restaurado para visualización óptima de ecuaciones MathJax/LaTeX.*
+---
+*Nota: Documentación optimizada para renderizado nativo de GitHub con soporte completo para MathJax.*
