@@ -12,6 +12,14 @@ Este repositorio constituye un **Executable Paper**. Cuantifica la histéresis d
 $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} - \underbrace{\delta_E(\beta+\tau)}_{\text{Fricción Energética}} - \underbrace{\delta_C\mu_{m^2}^{eff}}_{\text{Exacción Inmob.}} - \underbrace{\phi B_t}_{\text{Shock Externo}} + \eta_t$$
 
 ---
+## **Índice de Navegación**
+* [Ecuación Fundamental de Bienestar](#ecuación-fundamental-de-bienestar)
+* [1\. Marco Teórico y Formulación Estocástica](#1\-marco-teórico-y-formulación-estocástica)
+  * [ºLos Cuatro Pilares del Estancamiento](#ºlos-cuatro-pilares-del-estancamiento)
+* [2\. Arquitectura de Datos (CI/CD Pipeline)](#2\-arquitectura-de-datos-ci/cd-pipeline)
+* [3\. Reproducibilidad Local](#3\-reproducibilidad-local)
+
+---
 
 # **El Nudo Gordiano de la Economía Chilena**
 
