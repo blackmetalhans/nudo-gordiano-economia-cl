@@ -6,7 +6,7 @@
 > **Ejecutable Paper:** Modelado estocástico de ineficiencias estructurales y pérdida de bienestar agregado.
 
 ## 1. Executive Summary
-Este repositorio cuantifica matemáticamente la histéresis del desarrollo en Chile, modelando el colapso de la Productividad Total de Factores (PTF) desde la perspectiva del ingreso neto ciudadano ($I_{neto}$). El modelo abandona el análisis discursivo tradicional para plantear un sistema de ecuaciones estocásticas calibrables y auditables en tiempo real.
+Este repositorio cuantifica matemáticamente la histéresis del desarrollo en Chile, modelando el colapso de la Productividad Total de Factores (PTF) desde la perspectiva del ingreso neto ciudadano ($I_{neto}$). El modelo plantea un sistema de ecuaciones estocásticas calibrables y auditables.
 
 ## 2. Ecuación Fundamental de Bienestar
 
@@ -14,7 +14,7 @@ $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} -
 
 ---
 
-## Índice de Navegación
+## Índice de Navegación Detallado
 * [🛠️ Infraestructura de Automatización (Live Engine)](#🛠️-infraestructura-de-automatización-(live-engine))
 
 ---
