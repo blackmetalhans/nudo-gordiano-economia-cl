@@ -28,7 +28,28 @@
 </head>
 <body class='p-4 md:p-12'>
     <main class='max-w-6xl mx-auto space-y-8'>
-        <header class='border-b border-slate-700 pb-6'>
+        
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+                <div class="stat-card p-4 rounded">
+                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Autor</div>
+                    <div class="data-mono text-sm text-teal-400">Hans Soriano</div>
+                </div>
+                <div class="stat-card p-4 rounded">
+                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Versión</div>
+                    <div class="data-mono text-sm text-teal-400">v3.0.0</div>
+                </div>
+                <div class="stat-card p-4 rounded">
+                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Status</div>
+                    <div id="math-status" class="text-amber-500 data-mono text-sm font-semibold">...</div>
+                </div>
+                <div class="stat-card p-4 rounded bg-slate-900/40 border border-teal-500/30 col-span-2">
+                    <div class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mb-1">Mercado en Vivo</div>
+                    <div class="flex gap-4">
+                        <div class="text-xs text-teal-400 font-bold">UF: <span id="val-uf-live">...</span></div>
+                        <div class="text-xs text-teal-400 font-bold">USD: <span id="val-dolar-live">...</span></div>
+                    </div>
+                </div>
+            </div>
             <h1 class='text-4xl font-bold mb-4'>El Nudo Gordiano de la Economía Chilena</h1>
             <div class='grid grid-cols-1 md:grid-cols-4 gap-4'>
                 <div class='stat-card p-4 rounded'><div class='text-xs text-slate-500 uppercase'>Autor</div><div class='text-teal-400'>Hans Soriano</div></div>
