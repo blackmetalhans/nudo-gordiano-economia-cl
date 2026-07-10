@@ -4,23 +4,25 @@
     <meta charset='UTF-8'>
     <title>Nudo Gordiano - Dashboard</title>
     <style>
-        body { font-family: sans-serif; margin: 40px; line-height: 1.6; }
+        body { font-family: sans-serif; margin: 40px; line-height: 1.6; background-color: #fff; color: #333; }
         .container { max-width: 800px; margin: auto; }
-        #live-indicators { background: #f4f4f4; padding: 20px; border-radius: 8px; border-left: 5px solid #007bff; }
-        .val { font-weight: bold; color: #d9534f; }
+        #live-indicators { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; border-left: 5px solid #007bff; margin-top: 20px; }
+        .val { font-weight: bold; color: #d9534f; font-size: 1.2em; }
+        .label { color: #555; }
     </style>
 </head>
 <body>
     <div class='container'>
         <h1>El Nudo Gordiano de la Economía Chilena</h1>
-        <p>Dashboard de simulación y monitoreo de ineficiencias estructurales.</p>
+        <p>Dashboard de monitoreo de indicadores económicos fundamentales.</p>
 
         <div id='live-indicators'>
-            <h4>📊 Indicadores en Tiempo Real (vía mindicador.cl)</h4>
-            <p>UF: <span id='val-uf' class='val'>Cargando...</span></p>
-            <p>Dólar: <span id='val-dolar' class='val'>Cargando...</span></p>
-            <p>IPC: <span id='val-ipc' class='val'>Cargando...</span></p>
-            <small>Última actualización: <span id='fecha-act'>-</span></small>
+            <h4>📊 Indicadores Económicos (Live API)</h4>
+            <p><span class='label'>UF:</span> <span id='val-uf' class='val'>...</span></p>
+            <p><span class='label'>Dólar:</span> <span id='val-dolar' class='val'>...</span></p>
+            <p><span class='label'>IPC:</span> <span id='val-ipc' class='val'>...</span></p>
+            <hr>
+            <small>Fuente: mindicador.cl | Sincronizado: <span id='fecha-act'>-</span></small>
         </div>
     </div>
 
@@ -28,43 +30,45 @@
         async function fetchIndicators() {
             try {
                 const response = await fetch('https://mindicador.cl/api');
-                if (!response.ok) throw new Error('API Error');
+                if (!response.ok) throw new Error('API unreachable');
                 const data = await response.json();
                 
                 document.getElementById('val-uf').innerText = '$' + data.uf.valor.toLocaleString('es-CL');
                 document.getElementById('val-dolar').innerText = '$' + data.dolar.valor.toLocaleString('es-CL');
                 document.getElementById('val-ipc').innerText = data.ipc.valor + '%';
-                document.getElementById('fecha-act').innerText = new Date().toLocaleString();
+                document.getElementById('fecha-act').innerText = new Date().toLocaleString('es-CL');
             } catch (error) {
-                console.error('Error fetching data:', error);
-                document.getElementById('live-indicators').innerHTML += '<p style="color:red">Error al cargar indicadores.</p>';
+                console.error('Error:', error);
+                document.getElementById('live-indicators').innerHTML += '<p style="color:red">Error al conectar con la API de indicadores.</p>';
             }
         }
         window.onload = fetchIndicators;
     </script>
 
-    <!-- Sección de Indicadores Live Fusionada -->
-    <div id='live-indicators' style='background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; border-left: 5px solid #007bff; margin-top: 20px; font-family: sans-serif;'>
-        <h4>📊 Indicadores Económicos (Live API)</h4>
-        <p>UF: <span id='val-uf' style='font-weight:bold; color:#d9534f;'>...</span></p>
-        <p>Dólar: <span id='val-dolar' style='font-weight:bold; color:#d9534f;'>...</span></p>
-        <p>IPC: <span id='val-ipc' style='font-weight:bold; color:#d9534f;'>...</span></p>
-        <hr>
-        <small>Fuente: mindicador.cl | Sincronizado: <span id='fecha-act'>-</span></small>
+    <!-- Dashboard de Indicadores Económicos Fusionado -->
+    <div id='live-indicators' style='background: #f8f9fa; padding: 25px; border-radius: 12px; border: 1px solid #dee2e6; border-left: 6px solid #007bff; margin: 30px auto; max-width: 800px; font-family: sans-serif; shadow: 0 4px 6px rgba(0,0,0,0.1);'>
+        <h3 style='margin-top:0;'>📊 Monitoreo Económico en Tiempo Real</h3>
+        <div style='display: flex; justify-content: space-around; flex-wrap: wrap;'>
+            <p><span style='color:#555;'>UF:</span> <br><span id='val-uf' style='font-weight:bold; color:#d9534f; font-size:1.4em;'>...</span></p>
+            <p><span style='color:#555;'>Dólar:</span> <br><span id='val-dolar' style='font-weight:bold; color:#d9534f; font-size:1.4em;'>...</span></p>
+            <p><span style='color:#555;'>IPC:</span> <br><span id='val-ipc' style='font-weight:bold; color:#d9534f; font-size:1.4em;'>...</span></p>
+        </div>
+        <hr style='border: 0; border-top: 1px solid #eee;'>
+        <small style='color:#888;'>Fuente: mindicador.cl | Última actualización: <span id='fecha-act'>-</span></small>
     </div>
 
     <script>
-        async function fetchIndicators() {
+        async function updateDashboard() {
             try {
-                const response = await fetch('https://mindicador.cl/api');
-                const data = await response.json();
+                const res = await fetch('https://mindicador.cl/api');
+                const data = await res.json();
                 document.getElementById('val-uf').innerText = '$' + data.uf.valor.toLocaleString('es-CL');
                 document.getElementById('val-dolar').innerText = '$' + data.dolar.valor.toLocaleString('es-CL');
                 document.getElementById('val-ipc').innerText = data.ipc.valor + '%';
                 document.getElementById('fecha-act').innerText = new Date().toLocaleString('es-CL');
-            } catch (e) { console.error('Error API', e); }
+            } catch (e) { console.error('Error dashboard:', e); }
         }
-        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', fetchIndicators); } else { fetchIndicators(); }
+        window.addEventListener('load', updateDashboard);
     </script>
     
 </body>
