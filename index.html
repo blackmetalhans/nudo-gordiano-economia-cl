@@ -551,5 +551,26 @@
         resizeCanvas();
         runSimulation();
     </script>
+<script>
+        async function fetchLiveIndicators() {
+            try {
+                const response = await fetch('https://mindicador.cl/api');
+                if (!response.ok) throw new Error('API offline');
+                const data = await response.json();
+
+                // Mapeo a los elementos del dashboard
+                // Nota: Usamos selectores inteligentes para no romper el layout existente
+                const ufEl = document.getElementById('val-uf-live') || document.createElement('span');
+                const dolarEl = document.getElementById('val-dolar-live') || document.createElement('span');
+                
+                // Si no existen los IDs específicos, podemos actualizar los valores del simulador
+                // o añadir una sección flotante de indicadores reales.
+                console.log('Indicadores actualizados:', data.uf.valor);
+            } catch (error) {
+                console.error('Error API:', error);
+            }
+        }
+        window.addEventListener('load', fetchLiveIndicators);
+    </script>
 </body>
 </html>
