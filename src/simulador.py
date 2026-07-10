@@ -1,3 +1,20 @@
+
+import json
+import os
+
+def load_live_data():
+    path = 'data/live_indicators.json'
+    if os.path.exists(path):
+        with open(path, 'r') as f:
+            data = json.load(f)
+            print(f'[SYSTEM] Datos en vivo cargados: UF=${data["indicators"]["uf"]}')
+            return data['indicators']
+    return None
+
+live_params = load_live_data()
+# Ejemplo de integración: 
+# UF_ACTUAL = live_params['uf'] if live_params else 37000
+
 #!/usr/bin/env python3
 """
 Simulador estocástico del Nudo Gordiano – Economía Chile
