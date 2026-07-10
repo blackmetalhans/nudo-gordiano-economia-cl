@@ -23,9 +23,7 @@ $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Rendimiento Base}} -
 
 # **El Nudo Gordiano de la Economía Chilena**
 
-
 *Autor: Hans Soriano | Estado: Producción (v3.0.0-integral)*
-
 
 ## **1\. Marco Teórico y Formulación Estocástica**
 
@@ -110,7 +108,6 @@ El Nudo Gordiano: Anatomía del Derroche Fiscal en Chile
 ## 📄 Abstract
 Este repositorio formaliza un modelo estocástico de fricción fiscal aplicado a la economía chilena, estructurado como un *Executable Paper*. Mediante simulaciones de Monte Carlo, cuantifica la erosión del ingreso neto real a través de cuatro vectores ortogonales: hipertrofia de gobernanza ($k$-capas), varianza en costos de infraestructura pública, exacción tributaria energética y shocks exógenos de *commodities* (Brent). La arquitectura permite auditoría matemática directa y reproducibilidad determinista de la inferencia.
 
-
 **Tipo:** Paper Aplicado · Simulación Estocástica · Economía Pública  
 **Formato:** Executable Paper (código + datos + visualización reproducible)  
 **Repositorio:** `blackmetalhans/nudo-gordiano-economia-cl`
@@ -131,7 +128,7 @@ Este repositorio formaliza un modelo estocástico de fricción fiscal aplicado a
 
 ## Resumen / Abstract
 
-Este trabajo presenta un modelo de simulación estocástica de cuatro pilares para cuantificar cómo fricciones sistémicas del sector público chileno erosionan el ingreso neto real del ciudadano. La hipótesis central es que sobrecostos contractuales, impuestos regresivos sobre la energía, hipertrofia burocrática y volatilidad de commodities actúan de forma sinérgica y persistente sobre el bienestar.  
+Este trabajo presenta un modelo de simulación estocástica de cuatro pilares para cuantificar cómo fricciones sistémicas del sector público chileno erosionan el ingreso neto real del ciudadano. La hipótesis central es que sobrecostos contractuales, impuestos regresivos sobre la energía, hipertrofia burocrática y volatilidad de commodities actúan de forma sinérgica y persistente sobre el bienestar.
 
 Se calibraron ecuaciones analíticas sobre parámetros estructurales de la economía chilena y se implementó un motor de simulación Monte Carlo reproducible con interfaz de parámetros ajustables. Los resultados muestran que la combinación de sobreprecio + fricción institucional genera pérdidas persistentes de ingreso incluso bajo variaciones moderadas del entorno externo.
 
