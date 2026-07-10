@@ -292,3 +292,26 @@ def main(argv=None):
 
 if __name__ == "__main__":
     main()
+import numpy as np
+
+def apply_black_swan_shocks(base_value, probability=0.07):
+    """Inyecta eventos de baja probabilidad y alto impacto, señalando el origen de la crisis."""
+    if np.random.rand() < probability:
+        # Diccionario de causas raíz para no perder el sentido científico
+        shocks = {
+            'HIPERINFLACIÓN_ESTRUCTURAL': {'sev': 2.5, 'causa': 'Emisión descontrolada y pérdida de confianza fiscal'},
+            'COLAPSO_COBRE_BRENT': {'sev': 1.8, 'causa': 'Shock externo en matriz de ingresos/costos energéticos'},
+            'CRISIS_BUROCRÁTICA_TOTAL': {'sev': 2.1, 'causa': 'Parálisis por ineficiencia en administración pública'}
+        }
+        
+        type_key = np.random.choice(list(shocks.keys()))
+        event = shocks[type_key]
+        severity = np.random.uniform(1.2, event['sev'])
+        
+        print(f'[⚠️ CISNE NEGRO DETECTADO]')
+        print(f'   ORIGEN: {type_key}')
+        print(f'   DIAGNÓSTICO: {event["causa"]}')
+        print(f'   MAGNITUD: x{severity:.2f} de erosión adicional.')
+        
+        return base_value * severity
+    return base_value
