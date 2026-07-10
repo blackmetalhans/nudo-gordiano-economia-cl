@@ -289,3 +289,9 @@ La formulación metodológica expuesta representa un **modelo simplificado estoc
 ---
 
 **Última actualización:** 2026-07-10 | **Datos actualizados:** Automático (semanalmente los lunes)
+
+## 6. Monitoreo de Datos en Tiempo Real
+El sistema utiliza `src/fetch_data.py` para capturar indicadores desde `mindicador.cl`. Estos valores alimentan el motor de simulación para ajustar variables de fricción energética y exacción inmobiliaria.
+
+*   **Indicadores:** UF, UTM, Dólar, IPC.
+*   **Automatización:** GitHub Actions.
