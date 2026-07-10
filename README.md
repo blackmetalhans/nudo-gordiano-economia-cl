@@ -1,4 +1,10 @@
-# El Nudo Gordiano: Anatomía del Derroche Fiscal en Chile
+# nudo-gordiano-economia-cl
+
+> [!CAUTION]
+> ### ALERTA DE SISTEMA: ENTROPÍA ECONÓMICA DETECTADA
+> Este documento no es una simple simulación; es la autopsia en tiempo real del poder adquisitivo bajo fricción fiscal.
+
+El Nudo Gordiano: Anatomía del Derroche Fiscal en Chile
 
 [![Reproducibility: Executable Paper](https://img.shields.io/badge/Reproducibility-Executable_Paper-0052cc)](#-reproducibilidad-computacional)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
