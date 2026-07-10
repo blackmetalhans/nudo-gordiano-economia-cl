@@ -1,10 +1,9 @@
 # El Nudo Gordiano: Live Executable Paper
 
 > [!CAUTION]
-> ### ALERTA DE SISTEMA: ENTROPÍA ECONÓMICA DETECTADA
-> Este documento es la autopsia en tiempo real del poder adquisitivo bajo fricción fiscal en Chile. Datos automatizados vía mindicador.cl.
-
-# nudo-gordiano-economia-cl
+> ### ⚠️ ALERTA DE SISTEMA: ENTROPÍA ECONÓMICA DETECTADA
+> **Este documento no es una simple simulación; es la autopsia en tiempo real del poder adquisitivo bajo fricción fiscal en Chile.** 
+> *Actualización automatizada de vectores vía mindicador.cl.*
 
 > [!CAUTION]
 > ### ALERTA DE SISTEMA: ENTROPÍA ECONÓMICA DETECTADA
@@ -419,8 +418,10 @@ pip install numpy pandas scipy
 python src/simulador.py --iterations 10000 --seed 42
 ```
 
-
 ---
-## 🛠️ Adiciones de Automatización (Live Version)
-- **Motor de Ingesta**: `src/fetch_data.py` - Actualización semanal de UF, UTM e IPC.
-- **Simulador Dinámico**: `src/simulador.py` - Ahora prioriza `data/live_indicators.json` sobre valores estáticos.
+
+## 🛠️ Infraestructura de Automatización (Live Engine)
+Este paper se recalibra dinámicamente utilizando el siguiente stack:
+- **Motor de Ingesta**: `src/fetch_data.py` - Captura semanal de UF, UTM e IPC para ajuste de base monetaria simulada.
+- **Simulador Dinámico**: `src/simulador.py` - Motor de Monte Carlo que integra `data/live_indicators.json` para proyecciones de estrés financiero.
+- **Visualización**: Dashboard brutalista en `index.html` con inyección de datos en tiempo real.
