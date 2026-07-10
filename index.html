@@ -1,574 +1,63 @@
 <!DOCTYPE html>
-<html lang="es" class="antialiased">
+<html lang='es' class='antialiased'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Nudo Gordiano Económico | Paper Ejecutable</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
-    
+    <script src='https://cdn.tailwindcss.com'></script>
     <script>
         window.MathJax = {
-            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
-            chtml: { scale: 0.95 },
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
             startup: {
                 pageReady: () => {
                     return MathJax.startup.defaultPageReady().then(() => {
-                        document.getElementById('math-status').innerText = "✓ MathJax";
-                        document.getElementById('math-status').classList.replace('text-amber-500', 'text-emerald-500');
+                        const st = document.getElementById('math-status');
+                        if(st) { st.innerText = '✓ MathJax'; st.classList.replace('text-amber-500', 'text-emerald-500'); }
                     });
                 }
             }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
+    <script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js'></script>
     <style>
-        :root {
-            --bg-base: #0b1120;
-            --bg-panel: #1e293b;
-            --border-subtle: #334155; 
-            --text-main: #e2e8f0; 
-            --text-muted: #94a3b8; 
-            --text-prose: #cbd5e1;
-            --accent: #14b8a6;
-        }
-        body { 
-            background-color: var(--bg-base); 
-            color: var(--text-main); 
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .prose-academic { 
-            font-family: 'Merriweather', serif; 
-            line-height: 1.8; 
-            color: var(--text-prose); 
-            font-size: 1.05rem;
-        }
-        .prose-academic h2 { 
-            font-family: 'Inter', sans-serif; 
-            color: #f8fafc; 
-            font-weight: 600; 
-            margin-top: 2.5rem; 
-            margin-bottom: 1rem; 
-            font-size: 1.5rem; 
-            border-bottom: 1px solid var(--border-subtle); 
-            padding-bottom: 0.5rem;
-        }
-        .prose-academic h3 { 
-            font-family: 'Inter', sans-serif; 
-            color: #e2e8f0; 
-            font-weight: 500; 
-            margin-top: 2rem; 
-            margin-bottom: 0.75rem; 
-            font-size: 1.25rem;
-        }
-        .prose-academic p { 
-            margin-bottom: 1.25rem; 
-            text-align: justify;
-        }
-        .prose-academic strong { 
-            color: #f1f5f9; 
-            font-weight: 700;
-        }
-        
-        .data-mono { 
-            font-family: 'Fira Code', monospace; 
-            font-variant-numeric: tabular-nums;
-        }
-        
-        .panel { 
-            background: var(--bg-panel); 
-            border: 1px solid var(--border-subtle); 
-            border-radius: 6px; 
-            padding: 1.25rem; 
-            transition: all 0.2s;
-        }
-        .panel:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 12px rgba(20, 184, 166, 0.1);
-        }
-        
-        .chart-container {
-            position: relative; 
-            height: 480px; 
-            width: 100%;
-            background: var(--bg-base); 
-            border: 1px solid var(--border-subtle); 
-            border-radius: 6px;
-            background-image: linear-gradient(rgba(51, 65, 85, 0.3) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(51, 65, 85, 0.3) 1px, transparent 1px);
-            background-size: 50px 50px; 
-            background-position: center bottom;
-            overflow: hidden;
-        }
-        canvas { 
-            display: block; 
-            width: 100%; 
-            height: 100%;
-        }
-        
-        input[type=range] { 
-            -webkit-appearance: none; 
-            width: 100%; 
-            background: transparent;
-        }
-        input[type=range]::-webkit-slider-thumb { 
-            -webkit-appearance: none; 
-            height: 16px; 
-            width: 16px; 
-            border-radius: 50%; 
-            background: var(--accent); 
-            cursor: pointer; 
-            margin-top: -7px;
-            box-shadow: 0 0 8px rgba(20, 184, 166, 0.4);
-            transition: all 0.2s;
-        }
-        input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-        input[type=range]::-webkit-slider-runnable-track { 
-            width: 100%; 
-            height: 2px; 
-            cursor: pointer; 
-            background: var(--border-subtle);
-            border-radius: 2px;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, var(--bg-panel) 0%, rgba(20, 184, 166, 0.05) 100%);
-            border-left: 3px solid var(--accent);
-        }
-        
-        .label-with-value {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .shock-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 0.75rem;
-            background: rgba(239, 68, 68, 0.1);
-            border-radius: 3px;
-            font-size: 0.75rem;
-            color: #fca5a5;
-            font-weight: 600;
-        }
+        :root { --bg-base: #0b1120; --bg-panel: #1e293b; --accent: #14b8a6; --text-prose: #cbd5e1; }
+        body { background-color: var(--bg-base); color: #e2e8f0; font-family: sans-serif; }
+        .stat-card { background: linear-gradient(135deg, var(--bg-panel) 0%, rgba(20, 184, 166, 0.05) 100%); border-left: 3px solid var(--accent); }
+        .chart-container { height: 400px; background: var(--bg-base); border: 1px solid #334155; border-radius: 8px; }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8 lg:p-12 selection:bg-teal-500/30">
-
-    <main class="max-w-6xl mx-auto space-y-12">
-        
-        <!-- ENCABEZADO Y METADATA -->
-        <header class="border-b border-slate-700 pb-8">
-            <div class="flex justify-between items-start mb-6">
-                <div>
-                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-white mb-2 leading-tight">El Nudo Gordiano de la Economía Chilena</h1>
-                    <p class="text-slate-400 font-medium text-base md:text-lg">Modelado Estocástico de Ineficiencias Estructurales</p>
-                </div>
-                <div class="text-right">
-                    <a href="https://github.com/blackmetalhans/nudo-gordiano-economia-cl" target="_blank" class="inline-block px-3 py-1 bg-slate-800 border border-slate-700 rounded text-xs text-slate-400 hover:text-teal-400 hover:border-teal-500 transition">GitHub</a>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="stat-card p-4 rounded">
-                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Autor</div>
-                    <div class="data-mono text-sm text-teal-400">Hans Soriano</div>
-                </div>
-                <div class="stat-card p-4 rounded">
-                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Versión</div>
-                    <div class="data-mono text-sm text-teal-400">v3.0.0-integral</div>
-                </div>
-                <div class="stat-card p-4 rounded">
-                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Licencia</div>
-                    <div class="data-mono text-sm text-teal-400">MIT</div>
-                </div>
-                <div class="stat-card p-4 rounded">
-                    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Status</div>
-                    <div id="math-status" class="text-amber-500 data-mono text-sm font-semibold">Inicializando...</div>
+<body class='p-4 md:p-12'>
+    <main class='max-w-6xl mx-auto space-y-8'>
+        <header class='border-b border-slate-700 pb-6'>
+            <h1 class='text-4xl font-bold mb-4'>El Nudo Gordiano de la Economía Chilena</h1>
+            <div class='grid grid-cols-1 md:grid-cols-4 gap-4'>
+                <div class='stat-card p-4 rounded'><div class='text-xs text-slate-500 uppercase'>Autor</div><div class='text-teal-400'>Hans Soriano</div></div>
+                <div class='stat-card p-4 rounded'><div class='text-xs text-slate-500 uppercase'>Status</div><div id='math-status' class='text-amber-500'>Cargando...</div></div>
+                <!-- Tarjeta API en Vivo -->
+                <div class='stat-card p-4 rounded bg-slate-900/40 border border-teal-500/30'>
+                    <div class='text-[10px] text-slate-500 font-semibold uppercase mb-1'>Mercado en Vivo</div>
+                    <div class='flex flex-col gap-1'>
+                        <div class='text-xs'>UF: <span id='val-uf-live' class='text-teal-400 font-bold'>...</span></div>
+                        <div class='text-xs'>USD: <span id='val-dolar-live' class='text-teal-400 font-bold'>...</span></div>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- CONTENIDO NARRATIVO ACADÉMICO -->
-        <article class="prose-academic">
-            
-            <div class="border-l-4 border-teal-500 bg-gradient-to-r from-teal-500/10 to-transparent p-6 rounded-r mb-10">
-                <p class="text-sm md:text-base mb-0 italic">
-                    <strong>Abstract.</strong> Este documento ejecutable postula y cuantifica la histéresis del desarrollo chileno mediante un marco de cuatro vectores estocásticos acoplados: fricciones institucionales, exacción inmobiliaria, regresividad energética y exposición a commodities. Simulación dinámica en tiempo real con parámetros ajustables.
-                </p>
-            </div>
-
-            <h2>I. Formulación del Sistema y Función de Transferencia</h2>
-            <p>
-                El paradigma económico local ha sostenido históricamente que el estancamiento es producto exclusivo de shocks externos o ciclos crediticios globales. Sin embargo, al modelar microeconómicamente cada fricción, emerge una estructura distinta: las fallas de mercado y de gobierno actúan simultáneamente, amplificándose mutuamente a través de canales no-lineales.
-            </p>
-            <p>
-                Definimos la ecuación fundamental de transferencia de bienestar como un sistema de sustracción sobre un ingreso potencial base, ajustado por eficiencia estatal:
-            </p>
-            
-            <div class="bg-slate-900/50 p-6 rounded border border-slate-700 my-6 overflow-x-auto text-sm md:text-base">
-                $$I_{neto,t} = \underbrace{Y_0 \cdot \mathcal{E}(k)}_{\text{Base ajustada}} - \underbrace{\delta_E(\beta+\tau)}_{\text{Fricción Fija}} - \underbrace{\delta_C\mu_{m^2}^{eff}}_{\text{Exacción Inmob.}} - \underbrace{\phi B_t}_{\text{Shock Brent}} + \eta_t$$
-            </div>
-
-            <p>
-                Las fallas de mercado y de gobierno no son aditivas sino que amplifican mutuamente. La varianza del sistema ($\text{Var}[\eta_t]$), que captura el ruido blanco de volatilidades de margen energético e inmobiliario, es:
-            </p>
-
-            <div class="bg-slate-900/50 p-6 rounded border border-slate-700 my-6 overflow-x-auto text-sm md:text-base">
-                $$\text{Var}[\eta_t] = \delta_E^2\sigma_\varepsilon^2 + \delta_C^2\sigma_{m^2}^2 = 903.24 \text{ CLP}^2$$
-            </div>
-
-            <h2>II. Topología del Estancamiento: Los Cuatro Pilares</h2>
-
-            <h3>1. Costos de Agencia e Hipertrofia Burocrática ($k$)</h3>
-            <p>
-                El primer sumidero de eficiencia corresponde a la estructura organizativa del Estado. Modelamos el costo de agencia mediante $\mathcal{E}(k) = \max(0.05, 1 - 0.09k)$, donde $k$ es el número de capas administrativas. Con la estructura chilena típica ($k=5$), la eficiencia cae al 55%, equivalente a una pérdida de rendimiento de $531{,}900$ CLP/mes.
-            </p>
-
-            <h3>2. Búsqueda de Rentas y Exacción Inmobiliaria ($s$)</h3>
-            <p>
-                El mercado de suelo urbano en Chile exhibe profundas ineficiencias derivadas de captura regulatoria y especulación financiera. La desviación especulativa del suelo se modela como $\mu_{m^2}^{eff} = \mu_{m^2}(1 + s/100)$. Con $s=20\%$, la pérdida esperada alcanza $-60$ CLP/mes por ciudadano.
-            </p>
-
-            <h3>3. Indexación Regresiva de la Matriz Energética ($\tau$)</h3>
-            <p>
-                La economía nacional posee dependencia inelástica del transporte terrestre. El gravamen específico a combustibles opera como cuña fiscal profundamente regresiva. La ecuación de traspaso es $P_{surtidor} = 8.4486 \cdot B_t + 550.93 + \tau + \varepsilon_t$, donde $\tau$ es ajustable dinámicamente.
-            </p>
-
-            <h3>4. Commoditización y Varianza Exógena (Shock Brent, $B_t$)</h3>
-            <p>
-                La matriz productiva, al carecer de complejidad económica y valor agregado tecnológico, queda expuesta a fluctuaciones internacionales de materias primas. El factor de shock $\phi = \delta_E \cdot \alpha = 1.014$ CLP/mes por USD/barril acopla directamente el Brent al ingreso neto.
-            </p>
-
+        <article class='prose prose-invert max-w-none text-slate-300'>
+            <p>$$I_{neto,t} = Y_0 \cdot \mathcal{E}(k) - \delta_E(\beta+\tau) - \delta_C\mu_{m^2}^{eff} - \phi B_t + \eta_t$$</p>
+            <div class='chart-container my-8'><canvas id='incomeChart'></canvas></div>
         </article>
-
-        <!-- SECCIÓN INTERACTIVA / SIMULADOR -->
-        <section class="border-t border-slate-700 pt-12">
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold text-white mb-3">III. Laboratorio Estocástico Interactivo</h2>
-                <p class="text-slate-400 text-sm md:text-base">Altera los cuatro pilares en tiempo real. El gráfico visualiza 5 trayectorias estocásticas del ingreso neto sobre 120 meses con bandas de confianza $\mu \pm 3\sigma$.</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Controles Laterales -->
-                <div class="flex flex-col gap-6">
-                    
-                    <!-- KPI Principal -->
-                    <div class="panel stat-card">
-                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Ingreso Neto Esperado</div>
-                        <div class="data-mono text-4xl text-emerald-400 font-bold mb-2">
-                            $<span id="e-neto-display">649,658</span>
-                        </div>
-                        <div class="text-xs text-slate-500">CLP/mes | Rendimiento proyectado</div>
-                    </div>
-
-                    <!-- Pillar I: Capas Burocráticas -->
-                    <div class="panel">
-                        <div class="label-with-value mb-4">
-                            <label class="text-sm font-semibold text-slate-200">Capas Burocráticas</label>
-                            <span class="data-mono text-base text-rose-400 font-bold" id="val-k">5</span>
-                        </div>
-                        <input type="range" id="input-k" min="1" max="10" step="1" value="5">
-                        <p class="text-xs text-slate-500 mt-3 leading-relaxed">
-                            Determina eficiencia estatal $\mathcal{E}(k)$. Cada capa adicional cuesta $\\approx$106K CLP/mes.
-                        </p>
-                    </div>
-
-                    <!-- Pillar II: Especulación de Suelo -->
-                    <div class="panel">
-                        <div class="label-with-value mb-4">
-                            <label class="text-sm font-semibold text-slate-200">Especulación de Suelo</label>
-                            <span class="data-mono text-base text-amber-400 font-bold" id="val-s">0%</span>
-                        </div>
-                        <input type="range" id="input-s" min="0" max="100" step="5" value="0">
-                        <p class="text-xs text-slate-500 mt-3 leading-relaxed">
-                            Sobreprecio artificial del m² por rent-seeking financiero. Rango: 0–100%.
-                        </p>
-                    </div>
-
-                    <!-- Pillar III: Impuesto Logístico -->
-                    <div class="panel">
-                        <div class="label-with-value mb-4">
-                            <label class="text-sm font-semibold text-slate-200">Impuesto Logístico</label>
-                            <span class="data-mono text-base text-blue-400 font-bold" id="val-tau">222</span>
-                        </div>
-                        <input type="range" id="input-tau" min="0" max="500" step="10" value="222">
-                        <p class="text-xs text-slate-500 mt-3 leading-relaxed">
-                            Gravamen específico sobre combustibles (CLP/litro). Valor base chileno: 222.
-                        </p>
-                    </div>
-
-                    <!-- Pillar IV: Shock Brent -->
-                    <div class="panel">
-                        <div class="label-with-value mb-4">
-                            <label class="text-sm font-semibold text-slate-200">Precio Brent Base</label>
-                            <span class="data-mono text-base text-orange-400 font-bold" id="val-brent">75</span>
-                        </div>
-                        <input type="range" id="input-brent" min="20" max="150" step="5" value="75">
-                        <p class="text-xs text-slate-500 mt-3 leading-relaxed">
-                            Precio promedio del crudo (USD/barril). Factor de transmisión: $\\phi = 1.014$ CLP/mes.
-                        </p>
-                        <div class="shock-indicator mt-4">
-                            <span>⚡ Shock:</span>
-                            <span id="shock-value">0</span> USD/bbl
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Canvas Gráfico (2 columnas) -->
-                <div class="lg:col-span-2 flex flex-col">
-                    <div class="chart-container shadow-inner border-2 border-slate-700">
-                        <canvas id="incomeChart"></canvas>
-                    </div>
-                    <div class="mt-4 p-4 bg-slate-900/50 rounded border border-slate-700">
-                        <p class="text-center text-xs text-slate-500 font-mono leading-relaxed">
-                            <strong>Fig 1.</strong> Trayectorias simuladas del Ingreso Neto Ciudadano a $t=120$ meses. 
-                            5 caminos (colores distintos), banda $\\mu \\pm 3\\sigma$ en teal.
-                            Base de calibración: Chile 2024.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer class="border-t border-slate-700 pt-8 mt-16 pb-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs text-slate-500">
-                <div>
-                    <p class="font-semibold text-slate-400 mb-2">Repositorio</p>
-                    <p><a href="https://github.com/blackmetalhans/nudo-gordiano-economia-cl" target="_blank" class="hover:text-teal-400">blackmetalhans/nudo-gordiano-economia-cl</a></p>
-                </div>
-                <div>
-                    <p class="font-semibold text-slate-400 mb-2">Documentación</p>
-                    <p><a href="README.md" class="hover:text-teal-400">Teoría Completa (README.md)</a></p>
-                </div>
-                <div>
-                    <p class="font-semibold text-slate-400 mb-2">Estado</p>
-                    <p>Última actualización: 2026-07-10 | Datos: Automáticos (semanales)</p>
-                </div>
-            </div>
-        </footer>
-
     </main>
 
-    <!-- MOTOR DE SIMULACIÓN -->
     <script>
-        // Constantes del modelo
-        const Y0 = 1182000;
-        const DELTA_C = 0.01;
-        const DELTA_E = 0.12;
-        const MU_M2_BASE = 30000;
-        const BETA = 550.93;
-        const ALPHA = 8.4486;
-        const BRENT_BASE_DEFAULT = 75;
-        const VAR_ETA = 903.24;
-        const SIGMA_TOTAL = Math.sqrt(VAR_ETA);
-        const PHI = DELTA_E * ALPHA; // Factor de transmisión Brent -> Ingreso
-        const N_MONTHS = 120;
-        const N_PATHS = 5; 
-        
-        let E_I_NETO = 0;
-        let pathsData = [];
-
-        // DOM Elements
-        const inputK = document.getElementById('input-k');
-        const inputS = document.getElementById('input-s');
-        const inputTau = document.getElementById('input-tau');
-        const inputBrent = document.getElementById('input-brent');
-        const valK = document.getElementById('val-k');
-        const valS = document.getElementById('val-s');
-        const valTau = document.getElementById('val-tau');
-        const valBrent = document.getElementById('val-brent');
-        const shockValue = document.getElementById('shock-value');
-        const displayENeto = document.getElementById('e-neto-display');
-        
-        const canvas = document.getElementById('incomeChart');
-        const ctx = canvas.getContext('2d');
-        let dpr = window.devicePixelRatio || 1;
-
-        function updateMath() {
-            const k = parseFloat(inputK.value);
-            const s = parseFloat(inputS.value) / 100;
-            const tau = parseFloat(inputTau.value);
-            const brent = parseFloat(inputBrent.value);
-
-            // Actualizar valores mostrados
-            valK.innerText = k;
-            valS.innerText = `${(s * 100).toFixed(0)}%`;
-            valTau.innerText = tau;
-            valBrent.innerText = brent;
-            
-            // Calcular shock relativo
-            const shockRelative = brent - BRENT_BASE_DEFAULT;
-            shockValue.innerText = shockRelative > 0 ? '+' + shockRelative : shockRelative;
-            shockValue.parentElement.style.color = shockRelative > 0 ? '#fca5a5' : '#4ade80';
-
-            // Cálculos del modelo
-            const E_k = Math.max(0.05, 1 - 0.09 * k);
-            const mu_eff = MU_M2_BASE * (1 + s);
-            
-            // Precio del surtidor en función del Brent
-            const P_surtidor = ALPHA * brent + BETA + tau;
-            const energy_friction = DELTA_E * P_surtidor;
-            
-            // Ingreso neto esperado
-            E_I_NETO = (Y0 * E_k) - energy_friction - (DELTA_C * mu_eff);
-            displayENeto.innerText = Math.round(E_I_NETO).toLocaleString('es-CL');
-        }
-
-        function generateData() {
-            pathsData = [];
-            for(let p = 0; p < N_PATHS; p++) {
-                let currentPath = [];
-                let current_val = E_I_NETO; 
-                for(let i = 0; i < N_MONTHS; i++) {
-                    // Box-Muller transform
-                    let u = 0, v = 0;
-                    while(u === 0) u = Math.random();
-                    while(v === 0) v = Math.random();
-                    let z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-                    
-                    let noise = z * SIGMA_TOTAL * 15;
-                    current_val = current_val * 0.9 + (E_I_NETO + noise) * 0.1;
-                    currentPath.push(current_val);
-                }
-                pathsData.push(currentPath);
-            }
-        }
-
-        function resizeCanvas() {
-            const rect = canvas.parentNode.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            ctx.scale(dpr, dpr);
-        }
-
-        function drawChart() {
-            if (!pathsData.length) return;
-            const w = canvas.width / dpr;
-            const h = canvas.height / dpr;
-            ctx.clearRect(0, 0, w, h);
-
-            const p = { t: 40, b: 40, l: 90, r: 30 };
-            const cw = w - p.l - p.r;
-            const ch = h - p.t - p.b;
-
-            const span = 200000;
-            const minV = E_I_NETO - span;
-            const maxV = E_I_NETO + span;
-            const rng = maxV - minV;
-
-            const getY = val => p.t + ch - ((val - minV) / rng) * ch;
-            const getX = idx => p.l + (idx / (N_MONTHS - 1)) * cw;
-
-            // Banda de confianza 3σ
-            const sigmaViz = SIGMA_TOTAL * 15;
-            ctx.fillStyle = 'rgba(20, 184, 166, 0.08)';
-            ctx.fillRect(p.l, getY(E_I_NETO + sigmaViz * 3), cw, getY(E_I_NETO - sigmaViz * 3) - getY(E_I_NETO + sigmaViz * 3));
-
-            // Ejes
-            ctx.strokeStyle = '#334155';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(p.l, p.t);
-            ctx.lineTo(p.l, p.t + ch);
-            ctx.lineTo(p.l + cw, p.t + ch);
-            ctx.stroke();
-
-            // Línea de esperanza
-            ctx.strokeStyle = '#f59e0b';
-            ctx.setLineDash([5, 3]);
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(p.l, getY(E_I_NETO));
-            ctx.lineTo(p.l + cw, getY(E_I_NETO));
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            // Etiquetas Y
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = 'bold 12px "Fira Code"';
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(Math.round(maxV).toLocaleString('es-CL'), p.l - 12, p.t + 5);
-            ctx.fillText(Math.round(minV).toLocaleString('es-CL'), p.l - 12, p.t + ch - 5);
-            ctx.fillStyle = '#f59e0b';
-            ctx.fillText(`μ=${Math.round(E_I_NETO).toLocaleString('es-CL')}`, p.l - 12, getY(E_I_NETO));
-
-            // Trayectorias
-            const colors = ['#14b8a6', '#0ea5e9', '#8b5cf6', '#f43f5e', '#64748b'];
-            pathsData.forEach((path, idx) => {
-                ctx.strokeStyle = colors[idx % colors.length];
-                ctx.globalAlpha = 0.7;
-                ctx.lineWidth = 2;
-                ctx.lineJoin = 'round';
-                ctx.lineCap = 'round';
-                ctx.beginPath();
-                ctx.moveTo(getX(0), getY(path[0]));
-                for(let i = 1; i < N_MONTHS; i++) {
-                    ctx.lineTo(getX(i), getY(path[i]));
-                }
-                ctx.stroke();
-            });
-            ctx.globalAlpha = 1.0;
-
-            // Etiquetas X (meses)
-            ctx.fillStyle = '#64748b';
-            ctx.font = '10px "Fira Code"';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'top';
-            for(let m = 0; m <= 120; m += 30) {
-                ctx.fillText(m + 'm', getX(m), p.t + ch + 8);
-            }
-        }
-
-        function runSimulation() {
-            updateMath();
-            generateData();
-            drawChart();
-        }
-
-        // Event listeners
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            drawChart();
-        });
-
-        [inputK, inputS, inputTau, inputBrent].forEach(el => {
-            el.addEventListener('input', runSimulation);
-        });
-
-        // Inicialización
-        resizeCanvas();
-        runSimulation();
-    </script>
-<script>
         async function fetchLiveIndicators() {
             try {
-                const response = await fetch('https://mindicador.cl/api');
-                if (!response.ok) throw new Error('API offline');
-                const data = await response.json();
-
-                // Mapeo a los elementos del dashboard
-                // Nota: Usamos selectores inteligentes para no romper el layout existente
-                const ufEl = document.getElementById('val-uf-live') || document.createElement('span');
-                const dolarEl = document.getElementById('val-dolar-live') || document.createElement('span');
-                
-                // Si no existen los IDs específicos, podemos actualizar los valores del simulador
-                // o añadir una sección flotante de indicadores reales.
-                console.log('Indicadores actualizados:', data.uf.valor);
-            } catch (error) {
-                console.error('Error API:', error);
-            }
+                const res = await fetch('https://mindicador.cl/api');
+                const data = await res.json();
+                document.getElementById('val-uf-live').innerText = '$' + data.uf.valor.toLocaleString('es-CL');
+                document.getElementById('val-dolar-live').innerText = '$' + data.dolar.valor.toLocaleString('es-CL');
+            } catch (e) { console.error('API Error'); }
         }
         window.addEventListener('load', fetchLiveIndicators);
     </script>
